@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<title>Photos</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;height:100vh;display:flex;justify-content:center;align-items:center;background:#0b0b0f;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}
+.hp{position:relative;height:92vh;aspect-ratio:390/844;font-size:1.7vh;border:.8vh solid #222;border-radius:6vh;overflow:hidden;color:#fff;background:#000;user-select:none}
+.pulau{position:absolute;top:1.4vh;left:50%;transform:translateX(-50%);width:13vh;height:4vh;background:#000;border-radius:3vh;z-index:40}
+.status{position:absolute;top:1.4vh;left:0;right:0;height:4vh;display:flex;justify-content:space-between;align-items:center;padding:0 2.4em;font-weight:600;z-index:39}
+.status .r{display:flex;align-items:center;gap:.4em}
+.status svg{fill:#fff;height:.8em;width:auto}
+.bt{width:1.9em;height:.95em;border:1px solid rgba(255,255,255,.55);border-radius:.3em;position:relative}
+.bt::before{content:"";position:absolute;left:1px;top:1px;bottom:1px;width:75%;background:#fff;border-radius:.15em}
+
+.page{position:absolute;inset:0;display:flex;flex-direction:column;padding-top:5.8vh;background:#000}
+.top{display:flex;justify-content:space-between;align-items:center;padding:.6em 1.1em 0;min-height:3em}
+.title{font-size:2em;font-weight:700}
+.kiri{display:flex;align-items:center;color:#0a84ff;font-size:1em;cursor:pointer;gap:.1em}
+.kiri svg{width:1.4em;height:1.4em;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.sel{background:#1c1c1e;border-radius:2em;padding:.4em .9em;font-size:.85em;font-weight:600;color:#0a84ff}
+.seg{display:flex;margin:.7em 1.1em;background:#1c1c1e;border-radius:.7em;padding:.18em;font-size:.8em;text-align:center}
+.seg div{flex:1;padding:.4em 0;border-radius:.55em;color:#ddd;cursor:pointer}
+.seg .on{background:#636366;color:#fff;font-weight:600}
+.scroll{flex:1;min-height:0;overflow-y:auto;scrollbar-width:none}
+.scroll::-webkit-scrollbar{display:none}
+.g{display:grid;grid-template-columns:repeat(3,1fr);gap:2px}
+.g.besar{grid-template-columns:repeat(2,1fr);gap:3px}
+.t{aspect-ratio:1;background-color:#222;background-size:cover;background-position:center;cursor:pointer;position:relative}
+.t.fav::after{content:"♥";position:absolute;left:.4em;bottom:.2em;font-size:.9em;color:#fff;text-shadow:0 0 .4em rgba(0,0,0,.8)}
+.hdg{font-size:1.1em;font-weight:700;padding:.9em 1em .4em}
+.count{text-align:center;color:#8e8e93;font-size:.95em;padding:1.2em 0 6em}
+.count b{display:block;color:#fff;font-size:1.05em}
+.pad{padding-bottom:6em}
+.alb{display:grid;grid-template-columns:1fr 1fr;gap:1.1em 1em;padding:.6em 1.1em 6em}
+.alb .a{cursor:pointer}
+.alb .c{aspect-ratio:1;border-radius:.7em;background:#222 center/cover;margin-bottom:.4em}
+.alb b{display:block;font-size:.92em;font-weight:500}
+.alb small{color:#8e8e93;font-size:.8em}
+.cari{display:flex;align-items:center;gap:.5em;background:#1c1c1e;border-radius:.8em;margin:.6em 1.1em;padding:.55em .8em}
+.cari input{flex:1;background:none;border:0;outline:0;color:#fff;font-size:.95em;font-family:inherit}
+.cari input::placeholder{color:#8e8e93}
+.kosong{text-align:center;color:#8e8e93;padding:4em 0;font-size:1.05em}
+.mem{margin:.7em 1.1em;border-radius:1.2em;height:17em;background:#222 center/cover;position:relative;overflow:hidden;cursor:pointer}
+.mem::before{content:"";position:absolute;inset:0;background:linear-gradient(transparent 35%,rgba(0,0,0,.75))}
+.mem div{position:absolute;left:1em;bottom:.9em;right:1em}
+.mem small{display:block;color:#ddd;font-size:.78em;text-transform:uppercase;font-weight:600}
+.mem b{font-size:1.4em;font-weight:700}
+.tabbar{position:absolute;left:0;right:0;bottom:0;display:flex;justify-content:space-around;padding:.7em 0 2.4em;background:rgba(28,28,30,.88);backdrop-filter:blur(1.2em);-webkit-backdrop-filter:blur(1.2em);border-top:1px solid #2c2c2e;z-index:7}
+.tabbar div{text-align:center;font-size:.7em;color:#8e8e93;cursor:pointer}
+.tabbar .on{color:#0a84ff}
+.tabbar svg{display:block;margin:0 auto .3em;width:2.2em;height:2.2em;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+
+.view{position:absolute;inset:0;background:#000;display:none;flex-direction:column;z-index:30}
+.view.on{display:flex}
+.vtop{display:flex;align-items:center;justify-content:space-between;padding:6.4vh 1em .6em;background:rgba(0,0,0,.6);flex:none;z-index:2}
+.vtop .kiri{color:#0a84ff}
+.vtop .j{text-align:center;font-size:.85em}
+.vtop .j b{display:block;font-weight:600}
+.vtop .j small{color:#8e8e93;font-size:.85em}
+.vtop .sp{width:4em}
+.vimg{flex:1;background:#000 no-repeat center/contain;position:relative}
+.nv{position:absolute;top:0;bottom:0;width:22%;cursor:pointer;display:grid;place-items:center;color:rgba(255,255,255,.0);font-size:2.4em;transition:color .15s}
+.nv:hover{color:rgba(255,255,255,.55)}
+.nv.l{left:0}.nv.r{right:0}
+.vbot{display:flex;justify-content:space-around;align-items:center;padding:.8em 1em 2.8em;background:rgba(0,0,0,.6);flex:none}
+.vbot svg{width:1.8em;height:1.8em;fill:none;stroke:#0a84ff;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;cursor:pointer}
+.vbot svg.love.on{fill:#ff375f;stroke:#ff375f}
+.vbot .n{color:#8e8e93;font-size:.8em}
+
+.home{position:absolute;bottom:0;left:0;right:0;height:2.2em;display:flex;justify-content:center;align-items:flex-end;padding-bottom:.6em;cursor:pointer;z-index:45}
+.home i{width:10em;height:.35em;border-radius:1em;background:#fff;display:block}
+</style>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><link rel="stylesheet" href="mobile.css"></head>
+<body>
+<div class="hp">
+  <div class="pulau"></div>
+
+  <div class="status">
+    <span>21:06</span>
+    <div class="r">
+      <svg viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx=".7"/><rect x="5" y="5.5" width="3" height="6.5" rx=".7"/><rect x="10" y="3" width="3" height="9" rx=".7"/><rect x="15" y="0" width="3" height="12" rx=".7"/></svg>
+      <svg viewBox="0 0 16 12"><path d="M8 2.4c2.2 0 4.2.9 5.7 2.3l1-1.1C12.9 1.9 10.6.9 8 .9S3.1 1.9 1.3 3.6l1 1.1C3.8 3.3 5.8 2.4 8 2.4zm0 3.6c1.2 0 2.3.5 3.2 1.2l1-1.1C11 5 9.6 4.4 8 4.4S5 5 3.8 6.1l1 1.1C5.7 6.5 6.8 6 8 6zm0 3.4L6.3 7.6c.5-.5 1.1-.7 1.7-.7s1.2.2 1.7.7L8 9.4z"/></svg>
+      <div class="bt"></div>
+    </div>
+  </div>
+
+  <div class="page">
+    <div class="top"><div id="kiri"></div><div class="sel" id="selBtn">Select</div></div>
+    <div class="top" style="padding-top:0;min-height:0"><div class="title" id="judul">Library</div></div>
+    <div class="seg" id="seg">
+      <div data-m="years">Years</div><div data-m="months">Months</div><div data-m="days">Days</div><div data-m="all" class="on">All</div>
+    </div>
+    <div class="scroll" id="isi"></div>
+
+    <div class="tabbar" id="tabbar">
+      <div data-t="lib" class="on"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="9" cy="9.5" r="1.5"/><path d="M4 18l5-5 4 4 3-3 4 4"/></svg>Library</div>
+      <div data-t="foryou"><svg viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>For You</div>
+      <div data-t="albums"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3 10h18"/></svg>Albums</div>
+      <div data-t="search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>Search</div>
+    </div>
+  </div>
+
+  <!-- VIEWER -->
+  <div class="view" id="view">
+    <div class="vtop">
+      <div class="kiri" id="vback"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg><span id="vbackTxt">Library</span></div>
+      <div class="j"><b id="vtgl"></b><small id="vjam"></small></div>
+      <div class="sp"></div>
+    </div>
+    <div class="vimg" id="vimg">
+      <div class="nv l" id="vprev">‹</div>
+      <div class="nv r" id="vnext">›</div>
+    </div>
+    <div class="vbot">
+      <svg viewBox="0 0 24 24"><path d="M12 3v12M7 8l5-5 5 5M5 14v6h14v-6"/></svg>
+      <svg class="love" id="vlove" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>
+      <span class="n" id="vcnt"></span>
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.6v.2"/></svg>
+      <svg viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg>
+    </div>
+  </div>
+
+  <div class="home" onclick="location.href='home.html'"><i></i></div>
+</div>
+
+<script>
+// =====================================================================
+//  DATA — TAMBAH FOTO DI SINI
+// =====================================================================
+// f   = nama file foto tanpa .jpg (taruh fotonya di folder au-hp)
+// tgl = tanggal foto (TAHUN-BULAN-TANGGAL), jam = jam (opsional), ket = kata kunci buat pencarian
+const foto = [
+  { f: 'foto',          tgl: '2026-10-24', jam: '20:12', ket: 'hyuck es krim' },
+  { f: 'dhleefeed',     tgl: '2026-10-24', jam: '16:40', ket: 'hyuck feed' },
+  { f: 'profilehc',     tgl: '2026-10-23', jam: '21:07', ket: 'hyuck profil' },
+  { f: 'sorotanus',     tgl: '2026-10-23', jam: '18:30', ket: 'us berdua' },
+  { f: 'post1',         tgl: '2026-10-22', jam: '15:02', ket: 'jeno perpus' },
+  { f: 'post2',         tgl: '2026-10-22', jam: '12:40', ket: 'jeno' },
+  { f: 'post3',         tgl: '2026-10-21', jam: '19:15', ket: 'jeno kos' },
+  { f: 'post4',         tgl: '2026-10-20', jam: '08:30', ket: 'jeno kampus' },
+  { f: 'post5',         tgl: '2026-10-19', jam: '22:05', ket: 'jeno malam' },
+  { f: 'post6',         tgl: '2026-10-18', jam: '14:20', ket: 'jeno' },
+  { f: 'profileig',     tgl: '2026-10-17', jam: '09:10', ket: 'jeno profil' },
+  { f: 'sorotancampus', tgl: '2026-10-16', jam: '13:00', ket: 'kucing dokter lucu' },
+  { f: 'sorotankopi',   tgl: '2026-10-15', jam: '23:40', ket: 'kopi infus begadang' },
+  { f: 'sorotanrandom', tgl: '2026-10-14', jam: '17:25', ket: 'kucing kacamata baca' },
+  { f: 'fox',           tgl: '2026-10-12', jam: '20:50', ket: 'fox tersimpan' },
+  { f: 'najaemin',      tgl: '2026-10-10', jam: '11:11', ket: 'najaemin tersimpan' }
+];
+
+// Album. isi = daftar nama file (f) di atas.
+const album = [
+  { nama: 'Hyuck 💕',      isi: ['foto', 'dhleefeed', 'profilehc', 'sorotanus'] },
+  { nama: 'Postingan IG',  isi: ['post1', 'post2', 'post3', 'post4', 'post5', 'post6', 'profileig'] },
+  { nama: 'Tersimpan',     isi: ['fox', 'najaemin', 'sorotancampus', 'sorotankopi', 'sorotanrandom'] }
+];
+
+// Foto yang sudah ditandai hati dari awal
+const favorit = new Set(['foto', 'sorotanus']);
+
+// =====================================================================
+//  KODE
+// =====================================================================
+const NAMA_BULAN = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+const NAMA_HARI = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+const $ = id => document.getElementById(id);
+
+let tab = 'lib', mode = 'all', albumAktif = null, list = [], idx = 0, cariKata = '';
+
+function pasang(el, nama) {
+  const coba = [nama + '.jpg', nama + '.jpg.jpg'];
+  (function next(i) {
+    if (i >= coba.length) return;
+    const im = new Image();
+    im.onload = () => { el.style.backgroundImage = "url('" + coba[i] + "')"; };
+    im.onerror = () => next(i + 1);
+    im.src = coba[i];
+  })(0);
+}
+const urut = a => a.slice().sort((x, y) => (x.tgl + (x.jam || '')).localeCompare(y.tgl + (y.jam || '')));
+const tglObj = t => { const [y, m, d] = t.split('-').map(Number); return new Date(y, m - 1, d); };
+const tglPanjang = t => { const d = tglObj(t); return NAMA_HARI[d.getDay()] + ', ' + d.getDate() + ' ' + NAMA_BULAN[d.getMonth()]; };
+
+function grid(arr, kelas) {
+  const base = list.length;
+  arr.forEach(p => list.push(p));
+  return '<div class="g ' + (kelas || '') + '">' + arr.map((p, i) =>
+    '<div class="t' + (favorit.has(p.f) ? ' fav' : '') + '" data-i="' + (base + i) + '" data-f="' + p.f + '"></div>').join('') + '</div>';
+}
+function kelompok(arr, fKunci) {
+  const peta = new Map();
+  arr.forEach(p => { const k = fKunci(p); if (!peta.has(k)) peta.set(k, []); peta.get(k).push(p); });
+  return peta;
+}
+
+function render() {
+  list = [];
+  document.querySelectorAll('#tabbar [data-t]').forEach(e => e.classList.toggle('on', e.dataset.t === tab));
+  const seg = $('seg');
+  seg.style.display = (tab === 'lib') ? 'flex' : 'none';
+  document.querySelectorAll('#seg [data-m]').forEach(e => e.classList.toggle('on', e.dataset.m === mode));
+  $('kiri').innerHTML = '';
+  let h = '';
+
+  if (tab === 'lib') {
+    $('judul').textContent = 'Library';
+    const arr = urut(foto);
+    if (mode === 'all') h += grid(arr);
+    else {
+      const fk = mode === 'years' ? p => p.tgl.slice(0, 4)
+               : mode === 'months' ? p => NAMA_BULAN[tglObj(p.tgl).getMonth()] + ' ' + p.tgl.slice(0, 4)
+               : p => tglPanjang(p.tgl);
+      kelompok(arr, fk).forEach((a, k) => { h += '<div class="hdg">' + k + '</div>' + grid(a, mode === 'years' ? 'besar' : ''); });
+    }
+    h += '<div class="count"><b>' + foto.length + ' Photos</b>Updated Just Now</div>';
+  }
+
+  else if (tab === 'albums') {
+    if (albumAktif === null) {
+      $('judul').textContent = 'Albums';
+      const semua = [{ nama: 'Recents', isi: foto.map(p => p.f) }, { nama: 'Favorites', isi: foto.filter(p => favorit.has(p.f)).map(p => p.f) }].concat(album);
+      h += '<div class="alb">' + semua.map((a, i) =>
+        '<div class="a" data-alb="' + i + '"><div class="c" data-f="' + (a.isi[0] || '') + '"></div><b>' + a.nama + '</b><small>' + a.isi.length + '</small></div>').join('') + '</div>';
+      window._semuaAlbum = semua;
+    } else {
+      const a = window._semuaAlbum[albumAktif];
+      $('judul').textContent = a.nama;
+      $('kiri').innerHTML = '<div class="kiri" id="kembaliAlb"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg>Albums</div>';
+      const arr = urut(foto.filter(p => a.isi.includes(p.f)));
+      h += arr.length ? grid(arr) : '<div class="kosong">No Photos</div>';
+      h += '<div class="count"><b>' + arr.length + ' Photos</b></div>';
+    }
+  }
+
+  else if (tab === 'search') {
+    $('judul').textContent = 'Search';
+    h += '<div class="cari">🔍<input id="cariIn" type="text" placeholder="Photos, People, Places..." value="' + cariKata.replace(/"/g, '') + '"></div>';
+    const k = cariKata.trim().toLowerCase();
+    const hasil = urut(foto.filter(p => k && (p.ket + ' ' + p.f + ' ' + tglPanjang(p.tgl)).toLowerCase().includes(k)));
+    if (!k) h += '<div class="kosong">Ketik sesuatu, misalnya "es krim" atau "kucing"</div>';
+    else h += hasil.length ? grid(hasil) : '<div class="kosong">No Results</div>';
+  }
+
+  else if (tab === 'foryou') {
+    $('judul').textContent = 'For You';
+    const a = urut(foto);
+    h += '<div class="mem" data-i="0" data-f="' + a[a.length - 1].f + '"><div><small>Memory</small><b>Hari-hari kemarin 💕</b></div></div>';
+    list = a.slice().reverse();
+    h += '<div class="hdg">Featured Photos</div>' + grid(a.slice(-6).reverse());
+  }
+
+  $('isi').innerHTML = h + '<div class="pad"></div>';
+  document.querySelectorAll('#isi [data-f]').forEach(e => { if (e.dataset.f) pasang(e, e.dataset.f); });
+  if (tab === 'lib' || (tab === 'albums' && albumAktif !== null)) $('isi').scrollTop = $('isi').scrollHeight;
+  const ci = $('cariIn');
+  if (ci) { ci.oninput = () => { cariKata = ci.value; const pos = ci.selectionStart; render(); const n = $('cariIn'); n.focus(); n.setSelectionRange(pos, pos); }; }
+}
+
+// ---------- VIEWER ----------
+function tampil() {
+  const p = list[idx];
+  const d = tglObj(p.tgl);
+  $('vtgl').textContent = NAMA_HARI[d.getDay()] + ', ' + d.getDate() + ' ' + NAMA_BULAN[d.getMonth()] + ' ' + d.getFullYear();
+  $('vjam').textContent = p.jam || '';
+  $('vimg').style.backgroundImage = 'none';
+  pasang($('vimg'), p.f);
+  $('vlove').classList.toggle('on', favorit.has(p.f));
+  $('vcnt').textContent = (idx + 1) + ' / ' + list.length;
+  $('vbackTxt').textContent = tab === 'albums' ? 'Albums' : (tab === 'search' ? 'Search' : (tab === 'foryou' ? 'For You' : 'Library'));
+}
+function bukaFoto(i) { idx = i; $('view').classList.add('on'); tampil(); }
+function tutupFoto() { $('view').classList.remove('on'); render(); }
+function geser(n) { idx = (idx + n + list.length) % list.length; tampil(); }
+
+$('vback').onclick = tutupFoto;
+$('vprev').onclick = () => geser(-1);
+$('vnext').onclick = () => geser(1);
+$('vlove').onclick = () => {
+  const f = list[idx].f;
+  if (favorit.has(f)) favorit.delete(f); else favorit.add(f);
+  $('vlove').classList.toggle('on', favorit.has(f));
+};
+document.addEventListener('keydown', e => {
+  if (!$('view').classList.contains('on')) return;
+  if (e.key === 'ArrowLeft') geser(-1);
+  else if (e.key === 'ArrowRight') geser(1);
+  else if (e.key === 'Escape') tutupFoto();
+});
+
+// ---------- EVENT ----------
+document.addEventListener('click', e => {
+  let el;
+  if ((el = e.target.closest('#seg [data-m]'))) { mode = el.dataset.m; render(); return; }
+  if ((el = e.target.closest('#tabbar [data-t]'))) { tab = el.dataset.t; albumAktif = null; render(); return; }
+  if ((el = e.target.closest('[data-alb]'))) { albumAktif = Number(el.dataset.alb); render(); return; }
+  if (e.target.closest('#kembaliAlb')) { albumAktif = null; render(); return; }
+  if ((el = e.target.closest('#isi [data-i]'))) { bukaFoto(Number(el.dataset.i)); }
+});
+
+render();
+</script>
+</body>
+</html>

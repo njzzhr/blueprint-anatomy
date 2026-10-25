@@ -1,0 +1,416 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Simulasi HP</title>
+<style>
+:root{--page:#dfe2e8;--blue:#0a84ff;--gray:#262629;--sys:#1c1c1e;--line:#38383a}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--page:#0c0e13}}
+:root[data-theme="dark"]{--page:#0c0e13}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;margin:0;background:var(--page);overflow:hidden;font-family:-apple-system,"SF Pro Text","Helvetica Neue",Arial,sans-serif;color:#fff;user-select:none}
+.phone{position:absolute;left:50%;top:50%;width:390px;height:844px;border-radius:56px;background:#000;overflow:hidden;box-shadow:0 0 0 9px #17171a,0 0 0 11px #323236,0 30px 80px rgba(0,0,0,.5);transform-origin:center}
+.sb{position:absolute;top:0;left:0;right:0;height:54px;z-index:50;display:flex;justify-content:space-between;align-items:center;padding:6px 34px 0 42px;font-size:16px;font-weight:600;pointer-events:none}
+.sb span{font-size:13px;display:flex;gap:6px;align-items:center}
+.isl{position:absolute;left:50%;top:11px;width:122px;height:35px;margin-left:-61px;border-radius:20px;background:#000;padding:0!important}
+.bat{font-style:normal;background:#fff;color:#000;border-radius:5px;padding:0 5px;font-size:11px;font-weight:700}
+.hb{position:absolute;bottom:7px;left:50%;width:138px;height:5px;margin-left:-69px;border-radius:3px;background:#fff;z-index:70;cursor:pointer}
+.hb::before{content:"";position:absolute;inset:-14px -10px}
+.wall{background:radial-gradient(120% 70% at 20% 0%,#1d3557 0%,#0b1220 55%,#05070c 100%)}
+.lock{position:absolute;inset:0;z-index:40;text-align:center;transition:transform .5s cubic-bezier(.3,.8,.3,1);cursor:pointer}
+.lock.up{transform:translateY(-105%)}
+.lock .d{margin-top:86px;font-size:19px;font-weight:500;opacity:.85}
+.lock .t{font-size:92px;font-weight:600;letter-spacing:-2px;line-height:1.05}
+.lock .h{position:absolute;bottom:46px;left:0;right:0;font-size:14px;opacity:.7}
+.home{position:absolute;inset:0;padding:78px 22px 0}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);row-gap:24px}
+.ic{display:flex;flex-direction:column;align-items:center;gap:6px;font-size:11px;cursor:pointer;position:relative}
+.ic u{width:62px;height:62px;border-radius:15px;display:grid;place-items:center;font-size:30px;text-decoration:none}
+.ic.no.sh u{animation:sh .35s}
+@keyframes sh{25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+.bd{position:absolute;top:-6px;right:2px;min-width:22px;height:22px;border-radius:11px;background:#ff3b30;font-size:13px;font-weight:600;display:none;place-items:center;padding:0 6px;z-index:2}
+.dock{position:absolute;left:14px;right:14px;bottom:26px;height:92px;border-radius:34px;background:rgba(255,255,255,.14);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);display:flex;justify-content:space-around;align-items:center;padding:0 6px 6px}
+.dock .ic span{display:none}
+.app{position:absolute;inset:0;z-index:20;background:#000;transform:scale(.25);opacity:0;pointer-events:none;border-radius:50px;transition:transform .35s cubic-bezier(.3,.8,.3,1),opacity .25s}
+.app.on{transform:none;opacity:1;pointer-events:auto;border-radius:0}
+.hd{height:112px;padding-top:54px;display:flex;align-items:center;justify-content:space-between;padding-left:14px;padding-right:18px;background:rgba(28,28,30,.9);border-bottom:.5px solid var(--line);flex:none}
+.hd b{font-size:13px;font-weight:600;text-align:center;line-height:1.3}
+.hd b i{display:block;width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#6e6e73,#3a3a3c);margin:0 auto 2px}
+.back{font-size:34px;color:var(--blue);line-height:1;width:40px;cursor:pointer}
+.col{display:flex;flex-direction:column;height:100%}
+.list{flex:1;overflow-y:auto;padding:12px 12px 6px;display:flex;flex-direction:column;gap:3px;scrollbar-width:none}
+.list::-webkit-scrollbar{display:none}
+.m{max-width:72%;padding:8px 13px;border-radius:19px;font-size:16.5px;line-height:1.25;word-wrap:break-word;background:var(--gray);align-self:flex-start;margin-top:2px}
+.m.me{background:var(--blue);align-self:flex-end}
+.nm{font-size:11px;color:#8e8e93;margin:8px 0 0 14px;align-self:flex-start}
+.ft{width:216px;height:292px;border-radius:20px;align-self:flex-start;margin-top:3px;border:1px solid #2a2a2c;background:radial-gradient(circle at 48% 17%,#cfd3da 0 3px,#4a4f58 5px,transparent 22px),linear-gradient(#0a0c10,#050607 60%,#0d0e10)}
+.rd{align-self:flex-end;font-size:11px;color:#8e8e93;margin:2px 4px 0}
+.ty{align-self:flex-start;background:var(--gray);border-radius:18px;padding:11px 14px;display:flex;gap:4px;margin-top:4px}
+.ty i{width:7px;height:7px;border-radius:50%;background:#8e8e93;animation:z 1s infinite}
+.ty i:nth-child(2){animation-delay:.15s}.ty i:nth-child(3){animation-delay:.3s}
+@keyframes z{50%{opacity:.25}}
+.inp{display:flex;align-items:center;gap:8px;padding:8px 12px 8px;flex:none}
+.inp .pl{width:34px;height:34px;border-radius:50%;background:#2c2c2e;display:grid;place-items:center;font-size:22px;color:#aaa;flex:none}
+.fld{flex:1;min-height:36px;border:1px solid #3a3a3c;border-radius:19px;padding:7px 14px;font-size:16.5px;display:flex;align-items:center;overflow:hidden;white-space:pre}
+.fld .p{color:#6e6e73}
+.car{width:2px;height:20px;background:var(--blue);animation:b 1s steps(1) infinite}
+@keyframes b{50%{opacity:0}}
+.kb{flex:none;background:#1f1f21;padding:8px 3px 30px;height:300px;display:flex;flex-direction:column;gap:11px}
+.kr{display:flex;justify-content:center;gap:6px}
+.k{height:43px;min-width:34px;flex:1;max-width:36px;border:0;border-radius:6px;background:#5a5a5e;color:#fff;font-size:21px;font-family:inherit;display:grid;place-items:center;cursor:pointer;padding:0}
+.k:active{background:#8a8a8e}
+.k.f{background:#3a3a3d;max-width:46px;font-size:18px}
+.k.sp{max-width:none;flex:5;font-size:15px}
+.k.rt{max-width:none;flex:2;font-size:15px}
+.k.n{max-width:none;flex:1.5;font-size:15px;background:#3a3a3d}
+.ban{position:absolute;top:50px;left:8px;right:8px;z-index:60;border-radius:24px;background:rgba(235,235,240,.92);color:#000;padding:11px 14px;display:flex;gap:11px;align-items:center;transform:translateY(-140px);transition:transform .45s cubic-bezier(.3,.9,.3,1);cursor:pointer;box-shadow:0 8px 30px rgba(0,0,0,.35)}
+.ban.on{transform:none}
+.ban u{width:38px;height:38px;border-radius:9px;background:#34c759;display:grid;place-items:center;font-size:21px;text-decoration:none;flex:none}
+.ban div{flex:1;min-width:0;font-size:14px;line-height:1.3}
+.ban b{display:flex;justify-content:space-between}
+.ban b small{font-weight:400;color:#6e6e73;font-size:13px}
+.ban span{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ttl{font-size:32px;font-weight:700;padding:8px 18px 10px}
+.ph{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;overflow-y:auto;flex:1;padding-bottom:40px}
+.ph i{aspect-ratio:1;display:block}
+.nt{margin:0 14px;border-radius:12px;background:var(--sys);overflow:hidden}
+.nt div{padding:12px 16px;border-bottom:.5px solid var(--line);font-size:16px}
+.nt div:last-child{border:0}
+.nt small{display:block;color:#8e8e93;font-size:14px;margin-top:3px}
+.pass{position:absolute;inset:0;z-index:39;text-align:center;padding-top:100px;transition:transform .45s cubic-bezier(.3,.8,.3,1)}
+.pass.up{transform:translateY(-105%)}
+.pt{font-size:19px;font-weight:500}
+.dots{display:flex;gap:18px;justify-content:center;margin:26px 0 42px}
+.dots i{width:13px;height:13px;border-radius:50%;border:1.5px solid #fff}
+.dots i.f{background:#fff}
+.dots.sh{animation:sh .4s}
+.pad{display:grid;grid-template-columns:repeat(3,76px);gap:14px 22px;justify-content:center}
+.pk{width:76px;height:76px;border-radius:50%;border:0;background:rgba(255,255,255,.14);color:#fff;font-size:34px;font-family:inherit;cursor:pointer}
+.pk:active{background:rgba(255,255,255,.4)}
+.pk.z{grid-column:2}
+.pb{position:absolute;bottom:50px;left:48px;right:48px;display:flex;justify-content:space-between;font-size:16px}
+.pb span{cursor:pointer}
+.hint{position:absolute;bottom:20px;left:0;right:0;font-size:12px;opacity:.5}
+.call{position:absolute;inset:0;z-index:45;background:linear-gradient(#1b1d22,#0a0b0d);display:none;flex-direction:column;align-items:center;padding-top:150px}
+.call.on{display:flex}
+.call.vid{background:radial-gradient(60% 40% at 50% 38%,#1c2026,#000 70%);padding-top:100px}
+.cn{font-size:38px;font-weight:600}
+.cs{font-size:18px;opacity:.7;margin-top:6px}
+.cap{margin-top:auto;margin-bottom:210px;padding:0 34px;font-size:17px;text-align:center;opacity:.9;min-height:52px}
+.cb{position:absolute;bottom:70px;left:0;right:0;display:flex;justify-content:space-around;padding:0 40px}
+.cb div{display:flex;flex-direction:column;align-items:center;gap:8px;font-size:13px;cursor:pointer}
+.cb u{width:70px;height:70px;border-radius:50%;display:grid;place-items:center;font-size:28px;text-decoration:none}
+.igh{padding:6px 18px 10px;font-size:20px}
+.igp{display:flex;align-items:center;gap:22px;padding:0 18px}
+.av{width:84px;height:84px;border-radius:50%;background:linear-gradient(135deg,#515560,#23252b);flex:none;border:2px solid #333}
+.st{display:flex;flex:1;justify-content:space-around;text-align:center;font-size:13px}
+.st b{display:block;font-size:18px}
+.igb{padding:12px 18px;font-size:14px;line-height:1.4}
+.igbt{display:flex;gap:8px;padding:0 18px 14px}
+.igbt span{flex:1;text-align:center;background:#262629;border-radius:9px;padding:8px;font-size:14px;font-weight:600}
+.map{flex:1;position:relative;background:repeating-linear-gradient(90deg,transparent 0 58px,#2b3038 58px 64px),repeating-linear-gradient(0deg,transparent 0 74px,#2b3038 74px 80px),#171b21}
+.map::after{content:"";position:absolute;left:46%;top:46%;width:18px;height:18px;border-radius:50%;background:#0a84ff;border:3px solid #fff;box-shadow:0 0 0 14px rgba(10,132,255,.22)}
+.sheet{flex:none;height:330px;background:#1c1c1e;border-radius:22px 22px 0 0;padding:8px 16px 40px}
+.grab{width:38px;height:5px;border-radius:3px;background:#555;margin:0 auto 12px}
+.sr{background:#2c2c2e;border-radius:12px;padding:11px 14px;color:#8e8e93;font-size:16px}
+.qk{display:flex;gap:8px;margin:12px 0}
+.qk span{flex:1;text-align:center;background:#2c2c2e;border-radius:12px;padding:10px 4px;font-size:14px}
+.rc div{padding:10px 2px;border-bottom:.5px solid var(--line);font-size:16px}
+.rc small{display:block;color:#8e8e93;font-size:13px}
+.pg{flex:1;overflow-y:auto;padding:20px 22px;background:#fff;color:#111;font-size:16px;line-height:1.5;font-family:Georgia,serif}
+.pg h1{font-size:26px;line-height:1.2;margin:0 0 12px}
+.url{flex:none;background:#1c1c1e;padding:10px 16px 32px;text-align:center}
+.url span{display:block;background:#2c2c2e;border-radius:12px;padding:10px;font-size:15px}
+</style>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><link rel="stylesheet" href="mobile.css"></head>
+<body>
+<div class="phone" id="ph">
+  <div class="sb"><b id="jam">21:06</b><i class="isl"></i><span>5G <em class="bat">85</em></span></div>
+  <div class="ban" id="ban"><u>💬</u><div><b><span id="bj">4 orang</span><small>sekarang</small></b><span id="bt"></span></div></div>
+
+  <div class="lock wall" id="lock"><div class="d" id="tgl"></div><div class="t" id="jam2">21:06</div><div class="h">Ketuk untuk membuka</div></div>
+
+  <div class="home wall" id="home"><div class="grid" id="grid"></div><div class="dock" id="dock"></div></div>
+
+  <section class="app" id="a-pesan"><div class="col">
+    <div class="hd"><div class="back" data-home>‹</div><b><i></i><span id="grp"></span></b><div style="width:40px"></div></div>
+    <div class="list" id="list"></div>
+    <div class="inp"><div class="pl">+</div><div class="fld"><span id="tx"></span><span class="car"></span><span class="p" id="pp">iMessage</span></div></div>
+    <div class="kb" id="kb"></div>
+  </div></section>
+
+  <section class="app" id="a-foto"><div class="col">
+    <div style="height:54px;flex:none"></div><div class="ttl">Terbaru</div><div class="ph" id="ph2"></div>
+  </div></section>
+
+  <section class="app" id="a-catatan"><div class="col">
+    <div style="height:54px;flex:none"></div><div class="ttl">Catatan</div><div class="nt" id="nt"></div>
+  </div></section>
+
+  <div class="pass wall" id="pass"><div class="pt">Masukkan Kode Sandi</div><div class="dots" id="dots"><i></i><i></i><i></i><i></i></div><div class="pad" id="pad"></div><div class="pb"><span>Darurat</span><span id="batal">Batal</span></div><div class="hint" id="hint"></div></div>
+
+  <div class="call" id="call"><div class="cn" id="cn"></div><div class="cs" id="cs"></div><div class="cap" id="cap"></div><div class="cb" id="cb"></div></div>
+
+  <section class="app" id="a-ig"><div class="col"><div style="height:54px;flex:none"></div><div class="igh"><b id="igu"></b></div><div class="igp"><i class="av"></i><div class="st" id="igs"></div></div><div class="igb" id="igbio"></div><div class="igbt"><span>Edit profil</span><span>Bagikan profil</span></div><div class="ph" id="igg"></div></div></section>
+
+  <section class="app" id="a-peta"><div class="col"><div class="map"></div><div class="sheet"><div class="grab"></div><div class="sr">Cari di Peta</div><div class="qk"><span>🏠 Rumah</span><span>💼 Kantor</span><span>+ Tambah</span></div><div class="rc" id="rc"></div></div></div></section>
+
+  <section class="app" id="a-safari"><div class="col"><div style="height:54px;flex:none;background:#fff"></div><div class="pg" id="pg"></div><div class="url" id="url"></div></div></section>
+
+  <div class="hb" id="hb"></div>
+</div>
+
+<script>
+/* ============ UBAH CERITA DI SINI ============ */
+const CERITA = {
+  grup: "4 orang",
+  jamMulai: "21:06",               // kosongkan "" untuk jam asli
+  skrip: [                         // t = waktu muncul (ms) setelah layar dibuka
+    {t:3500,  dari:"Dimas", teks:"gw sama bang Raka otw pulang, lu di mana?"},
+    {t:8000,  dari:"Raka",  teks:"jalan depan kos gelap banget njir"},
+    {t:12500, dari:"Raka",  foto:1},
+    {t:17000, dari:"Dimas", teks:"lu denger suara itu nggak?"}
+  ],
+  balas: [                         // balasan otomatis setelah kamu mengirim pesan
+    {dari:"Dimas", teks:"serius nanya, itu bukan lu yang kirim?"},
+    {dari:"Raka",  teks:"jangan matiin hp. kita ke sana sekarang"},
+    {dari:"Dimas", teks:"tunggu di situ"}
+  ],
+  sandi: "1234",                   // kode untuk membuka HP
+  petunjuk: "",                    // teks kecil di bawah layar sandi (opsional)
+  telepon: {t:26000, nama:"Unknown", ulang:8000,   // t = muncul setelah HP dibuka; ulang = telepon lagi jika ditolak
+    teks:[[2500,"kamu masih di sana?"],[7500,"jangan tutup teleponnya"]]},  // teks muncul setelah diterima
+  ig: {nama:"nama.akun", bio:"mahasiswa\nbukan siapa-siapa", post:9, pengikut:"312", mengikuti:"187"},
+  peta: [["Kos Melati","450 m"],["Warung Pak Anto","1,2 km"],["Gang Belakang","2 km"]],
+  safari: {url:"beritakota.id/hilang-di-gang", judul:"Warga Resah, Lampu Gang Belakang Mati",
+    isi:["Warga melaporkan lampu penerangan di gang belakang padam sejak awal pekan.","Beberapa orang mengaku mendengar suara langkah saat melintas malam hari."]},
+  catatan: [
+    ["Jangan lupa", "Lampu jalan gang belakang mati lagi sejak Selasa"],
+    ["Belanja", "Mie, telur, baterai senter"]
+  ]
+};
+/* ============================================= */
+
+const $ = id => document.getElementById(id);
+const IK = [["Pesan","💬","#34c759","pesan"],["Foto","🌄","#ff9f0a","foto"],["Catatan","📝","#ffd60a","catatan"],["Kamera","📷","#636366"],["Peta","🗺️","#30b0c7","peta"],["Cuaca","⛅","#0a84ff"],["Instagram","📸","#c13584","ig"],["Pengaturan","⚙️","#8e8e93"]];
+const DK = [["Telepon","📞","#34c759"],["Safari","🧭","#0a84ff","safari"],["Musik","🎵","#ff375f"],["Surel","✉️","#0a84ff"]];
+let app = "", msgs = [], belum = 0, idxBalas = 0, nunggu = 0;
+
+function fit(){ $("ph").style.transform = `translate(-50%,-50%) scale(${Math.min(innerWidth/410, innerHeight/866)})`; }
+addEventListener("resize", fit); fit();
+
+function jam(){
+  const s = CERITA.jamMulai || new Date().toLocaleTimeString("id-ID",{hour:"2-digit",minute:"2-digit"}).replace(".",":");
+  $("jam").textContent = $("jam2").textContent = s;
+  $("tgl").textContent = new Date().toLocaleDateString("id-ID",{weekday:"long",day:"numeric",month:"long"});
+}
+jam(); if(!CERITA.jamMulai) setInterval(jam,15000);
+
+function ikon(d, dock){
+  const e = document.createElement("div");
+  e.className = "ic" + (d[3] ? "" : " no");
+  e.innerHTML = `<u style="background:${d[2]}">${d[1]}</u><span>${d[0]}</span>` + (d[3]==="pesan" && !dock ? '<i class="bd" id="bd"></i>' : "");
+  e.onclick = () => d[3] ? buka(d[3]) : (e.classList.remove("sh"), void e.offsetWidth, e.classList.add("sh"));
+  return e;
+}
+IK.forEach(d => $("grid").append(ikon(d)));
+DK.forEach(d => $("dock").append(ikon(d, 1)));
+
+function buka(n){
+  app = n; document.querySelectorAll(".app").forEach(a => a.classList.remove("on"));
+  $("a-"+n).classList.add("on");
+  if(n==="pesan"){ belum = 0; badge(); $("ban").classList.remove("on"); gambar(); }
+}
+function pulang(){ app = ""; document.querySelectorAll(".app").forEach(a => a.classList.remove("on")); }
+$("hb").onclick = pulang;
+document.querySelectorAll("[data-home]").forEach(b => b.onclick = pulang);
+function badge(){ const b=$("bd"); b.textContent = belum; b.style.display = belum ? "grid" : "none"; }
+
+/* ---------- bunyi ---------- */
+let ac;
+function ping(){
+  try{
+    ac = ac || new (window.AudioContext||window.webkitAudioContext)();
+    [1318,1568].forEach((f,i)=>{
+      const o=ac.createOscillator(), g=ac.createGain(), t=ac.currentTime+i*.12;
+      o.frequency.value=f; g.gain.setValueAtTime(.0001,t);
+      g.gain.exponentialRampToValueAtTime(.15,t+.02); g.gain.exponentialRampToValueAtTime(.0001,t+.4);
+      o.connect(g); g.connect(ac.destination); o.start(t); o.stop(t+.45);
+    });
+    navigator.vibrate && navigator.vibrate(60);
+  }catch(e){}
+}
+
+/* ---------- notifikasi ---------- */
+let tBan;
+function banner(m){
+  $("bj").textContent = CERITA.grup;
+  $("bt").textContent = m.dari + ": " + (m.teks || "Foto");
+  $("ban").classList.add("on"); clearTimeout(tBan);
+  tBan = setTimeout(() => $("ban").classList.remove("on"), 4800);
+}
+$("ban").onclick = () => buka("pesan");
+
+/* ---------- pesan ---------- */
+function esc(s){ return s.replace(/[&<>]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;"}[c])); }
+function gambar(){
+  $("grp").textContent = CERITA.grup + " ›";
+  let h = "", lastFrom = "", lastMe = -1;
+  msgs.forEach((m,i) => { if(m.dari==="aku") lastMe = i; });
+  msgs.forEach((m,i) => {
+    const me = m.dari === "aku";
+    if(!me && m.dari !== lastFrom) h += `<div class="nm">${esc(m.dari)}</div>`;
+    lastFrom = m.dari;
+    h += m.foto ? '<div class="ft"></div>' : `<div class="m${me?" me":""}">${esc(m.teks)}</div>`;
+    if(i === lastMe && m.dibaca) h += '<div class="rd">Dibaca</div>';
+  });
+  if(nunggu) h += '<div class="ty"><i></i><i></i><i></i></div>';
+  $("list").innerHTML = h; $("list").scrollTop = 1e6;
+}
+function masuk(m){
+  if(app === "pesan"){
+    nunggu = 1; gambar();
+    setTimeout(() => { nunggu = 0; msgs.push(m); gambar(); ping(); }, 1100);
+  } else {
+    msgs.push(m); belum++; badge(); banner(m); ping();
+  }
+}
+
+/* ---------- keyboard ---------- */
+let teks = "";
+function tampil(){ $("tx").textContent = teks; $("pp").style.display = teks ? "none" : ""; }
+function huruf(c){ teks += c; tampil(); }
+function hapus(){ teks = teks.slice(0,-1); tampil(); }
+function kirim(){
+  const t = teks.trim(); if(!t) return;
+  teks = ""; tampil();
+  const m = {dari:"aku", teks:t}; msgs.push(m); gambar();
+  setTimeout(() => { m.dibaca = 1; gambar(); }, 1300);
+  const b = CERITA.balas[idxBalas++];
+  if(b) setTimeout(() => masuk(b), 3000);
+}
+(function(){
+  const kb = $("kb");
+  const baris = (arr, ekstra) => {
+    const r = document.createElement("div"); r.className = "kr";
+    if(ekstra && ekstra[0]) r.append(tombol(ekstra[0],"f"));
+    arr.split("").forEach(c => r.append(tombol(c, "", () => huruf(c))));
+    if(ekstra && ekstra[1]) r.append(tombol(ekstra[1],"f", hapus));
+    kb.append(r);
+  };
+  function tombol(t, cls, fn){
+    const b = document.createElement("button"); b.className = "k " + cls; b.textContent = t;
+    b.onpointerdown = e => { e.preventDefault(); fn && fn(); };
+    return b;
+  }
+  baris("qwertyuiop"); baris("asdfghjkl"); baris("zxcvbnm", ["⇧","⌫"]);
+  const r = document.createElement("div"); r.className = "kr";
+  r.append(tombol("123","n"), tombol("space","sp",()=>huruf(" ")), tombol("return","rt",kirim));
+  kb.append(r);
+})();
+document.addEventListener("keydown", e => {
+  if(app !== "pesan" || e.metaKey || e.ctrlKey) return;
+  if(e.key === "Enter") kirim();
+  else if(e.key === "Backspace") hapus();
+  else if(e.key.length === 1) huruf(e.key);
+});
+
+/* ---------- foto & catatan ---------- */
+(function(){
+  let h = '<i style="background:radial-gradient(circle at 48% 17%,#cfd3da 0 2px,#4a4f58 4px,transparent 16px),linear-gradient(#0a0c10,#050607)"></i>';
+  for(let i = 0; i < 17; i++){
+    const a = (i*47+200) % 360;
+    h += `<i style="background:linear-gradient(${i*31}deg,hsl(${a},35%,${22+i%4*6}%),hsl(${(a+40)%360},40%,${14+i%3*6}%))"></i>`;
+  }
+  $("ph2").innerHTML = h;
+  $("nt").innerHTML = CERITA.catatan.map(c => `<div>${esc(c[0])}<small>${esc(c[1])}</small></div>`).join("");
+})();
+
+/* ---------- buka kunci & mulai cerita ---------- */
+$("lock").onclick = () => {
+  if($("lock").classList.contains("up")) return;
+  $("lock").classList.add("up");
+};
+
+/* ---------- kode sandi ---------- */
+let jalan = 0;
+function mulai(){
+  if(jalan) return; jalan = 1;
+  CERITA.skrip.forEach(s => setTimeout(() => masuk(s), s.t));
+  if(CERITA.telepon) setTimeout(telpMasuk, CERITA.telepon.t);
+}
+(function(){
+  let k = ""; const dots = [...document.querySelectorAll("#dots i")];
+  $("hint").textContent = CERITA.petunjuk || "";
+  const isi = () => dots.forEach((d,i) => d.classList.toggle("f", i < k.length));
+  "1234567890".split("").forEach(c => {
+    const b = document.createElement("button"); b.className = "pk" + (c==="0" ? " z" : ""); b.textContent = c;
+    b.onpointerdown = e => {
+      e.preventDefault(); if(k.length >= 4) return;
+      k += c; isi();
+      if(k.length === 4) setTimeout(() => {
+        if(k === CERITA.sandi){ $("pass").classList.add("up"); ping(); mulai(); }
+        else { $("dots").classList.add("sh"); navigator.vibrate && navigator.vibrate(200); setTimeout(() => { $("dots").classList.remove("sh"); k = ""; isi(); }, 450); }
+      }, 150);
+    };
+    $("pad").append(b);
+  });
+  $("batal").onclick = () => { k = ""; isi(); $("lock").classList.remove("up"); };
+})();
+
+/* ---------- telepon FaceTime ---------- */
+function nada(f, t0, d){
+  try{
+    ac = ac || new (window.AudioContext||window.webkitAudioContext)();
+    const o = ac.createOscillator(), g = ac.createGain(), t = ac.currentTime + t0;
+    o.frequency.value = f; g.gain.setValueAtTime(.0001,t);
+    g.gain.exponentialRampToValueAtTime(.12,t+.03); g.gain.exponentialRampToValueAtTime(.0001,t+d);
+    o.connect(g); g.connect(ac.destination); o.start(t); o.stop(t+d+.05);
+  }catch(e){}
+}
+let dr, tl;
+function dering(){ nada(784,0,.35); nada(988,.4,.35); nada(784,.8,.35); navigator.vibrate && navigator.vibrate([300,150,300]); }
+function tombolCall(a){
+  $("cb").innerHTML = a.map(x => `<div data-a="${x[2]}"><u style="background:${x[1]}">${x[0]}</u>${x[3]}</div>`).join("");
+  $("cb").querySelectorAll("div").forEach(d => d.onclick = () => aksi(d.dataset.a));
+}
+function telpMasuk(){
+  const p = CERITA.telepon;
+  $("cn").textContent = p.nama; $("cs").textContent = "FaceTime Video…"; $("cap").textContent = "";
+  $("call").className = "call on"; $("ban").classList.remove("on");
+  tombolCall([["✕","#ff3b30","tolak","Tolak"],["📹","#34c759","terima","Terima"]]);
+  dering(); clearInterval(dr); dr = setInterval(dering, 2600);
+}
+function aksi(a){
+  if(a === "x") return;
+  clearInterval(dr);
+  const p = CERITA.telepon;
+  if(a === "tolak" || a === "akhir"){
+    clearInterval(tl); $("call").className = "call";
+    if(a === "tolak" && p.ulang) setTimeout(telpMasuk, p.ulang);
+    return;
+  }
+  let d = 0; $("call").className = "call on vid"; $("cs").textContent = "00:00";
+  tombolCall([["🎤","#3a3a3c","x","Bisukan"],["📹","#3a3a3c","x","Kamera"],["✕","#ff3b30","akhir","Akhiri"]]);
+  tl = setInterval(() => { d++; $("cs").textContent = String(d/60|0).padStart(2,"0") + ":" + String(d%60).padStart(2,"0"); }, 1000);
+  (p.teks || []).forEach(s => setTimeout(() => { if($("call").classList.contains("vid")) $("cap").textContent = s[1]; }, s[0]));
+}
+
+/* ---------- isi Instagram, Peta, Safari ---------- */
+(function(){
+  const g = CERITA.ig;
+  $("igu").textContent = g.nama;
+  $("igs").innerHTML = [[g.post,"postingan"],[g.pengikut,"pengikut"],[g.mengikuti,"mengikuti"]].map(x => `<div><b>${x[0]}</b>${x[1]}</div>`).join("");
+  $("igbio").innerHTML = esc(g.bio).replace(/\n/g,"<br>");
+  let h = "";
+  for(let i = 0; i < g.post; i++) h += `<i style="background:linear-gradient(${i*40}deg,hsl(${(i*53+10)%360},30%,${20+i%3*6}%),hsl(${(i*53+60)%360},35%,13%))"></i>`;
+  $("igg").innerHTML = h;
+  $("rc").innerHTML = CERITA.peta.map(c => `<div>${esc(c[0])}<small>${esc(c[1])}</small></div>`).join("");
+  const s = CERITA.safari;
+  $("pg").innerHTML = `<h1>${esc(s.judul)}</h1>` + s.isi.map(p => `<p>${esc(p)}</p>`).join("");
+  $("url").innerHTML = `<span>🔒 ${esc(s.url)}</span>`;
+})();
+</script>
+</body>
+</html>

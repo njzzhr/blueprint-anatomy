@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<title>Notes</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;height:100vh;display:flex;justify-content:center;align-items:center;background:#0b0b0f;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}
+.hp{position:relative;height:92vh;aspect-ratio:390/844;font-size:1.7vh;border:.8vh solid #222;border-radius:6vh;overflow:hidden;color:#fff;background:#000}
+.pulau{position:absolute;top:1.4vh;left:50%;transform:translateX(-50%);width:13vh;height:4vh;background:#000;border-radius:3vh;z-index:12}
+.status{position:absolute;top:1.4vh;left:0;right:0;height:4vh;display:flex;justify-content:space-between;align-items:center;padding:0 2.4em;font-weight:600;z-index:11}
+.status .r{display:flex;align-items:center;gap:.4em}
+.status svg{fill:#fff;height:.8em;width:auto}
+.bt{width:1.9em;height:.95em;border:1px solid rgba(255,255,255,.55);border-radius:.3em;position:relative}
+.bt::before{content:"";position:absolute;left:1px;top:1px;bottom:1px;width:75%;background:#fff;border-radius:.15em}
+
+.page{position:absolute;inset:0;display:flex;flex-direction:column;padding-top:5.8vh;background:#000}
+#detail{display:none}
+.nav{display:flex;justify-content:space-between;align-items:center;padding:.7em 1em;color:#ffd60a;font-size:1em;cursor:pointer}
+.nav span{display:flex;align-items:center;gap:.2em}
+svg.s{width:1.4em;height:1.4em;fill:none;stroke:#ffd60a;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.scroll{flex:1;overflow-y:auto;scrollbar-width:none;padding:0 1.1em}
+.scroll::-webkit-scrollbar{display:none}
+.big{font-size:2em;font-weight:700;padding:.1em 0 .4em}
+.search{background:#1c1c1e;border-radius:.7em;padding:.6em .8em;color:#8e8e93;font-size:.95em;margin-bottom:1em}
+.list{background:#1c1c1e;border-radius:.9em;overflow:hidden}
+.item{padding:.7em 1em;cursor:pointer;position:relative}
+.item + .item::before{content:"";position:absolute;top:0;left:1em;right:0;height:1px;background:#2c2c2e}
+.item b{display:block;font-size:1em;margin-bottom:.2em}
+.item small{color:#8e8e93;font-size:.85em;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.item small em{font-style:normal;color:#fff;margin-right:.6em}
+.foot{display:flex;justify-content:space-between;align-items:center;padding:.8em 1.2em 2.8em;background:#1c1c1e;font-size:.8em;color:#fff}
+.foot span{flex:1;text-align:center}
+.foot svg{width:1.6em;height:1.6em}
+.tgl{text-align:center;color:#8e8e93;font-size:.8em;padding:.3em 0 .8em}
+.judul{font-size:1.7em;font-weight:700;margin-bottom:.4em}
+.isi{white-space:pre-wrap;line-height:1.5;font-size:1.05em;padding-bottom:3em}
+.home{position:absolute;bottom:0;left:0;right:0;height:2.2em;display:flex;justify-content:center;align-items:flex-end;padding-bottom:.6em;cursor:pointer;z-index:13}
+.home i{width:10em;height:.35em;border-radius:1em;background:#fff;display:block}
+</style>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><link rel="stylesheet" href="mobile.css"></head>
+<body>
+<div class="hp">
+  <div class="pulau"></div>
+
+  <div class="status">
+    <span>21:06</span>
+    <div class="r">
+      <svg viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx=".7"/><rect x="5" y="5.5" width="3" height="6.5" rx=".7"/><rect x="10" y="3" width="3" height="9" rx=".7"/><rect x="15" y="0" width="3" height="12" rx=".7"/></svg>
+      <svg viewBox="0 0 16 12"><path d="M8 2.4c2.2 0 4.2.9 5.7 2.3l1-1.1C12.9 1.9 10.6.9 8 .9S3.1 1.9 1.3 3.6l1 1.1C3.8 3.3 5.8 2.4 8 2.4zm0 3.6c1.2 0 2.3.5 3.2 1.2l1-1.1C11 5 9.6 4.4 8 4.4S5 5 3.8 6.1l1 1.1C5.7 6.5 6.8 6 8 6zm0 3.4L6.3 7.6c.5-.5 1.1-.7 1.7-.7s1.2.2 1.7.7L8 9.4z"/></svg>
+      <div class="bt"></div>
+    </div>
+  </div>
+
+  <!-- Daftar catatan -->
+  <div class="page" id="daftar">
+    <div class="nav" onclick="location.href='home.html'">
+      <span><svg class="s" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg>Folders</span>
+      <svg class="s" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="8" cy="12" r=".6"/><circle cx="12" cy="12" r=".6"/><circle cx="16" cy="12" r=".6"/></svg>
+    </div>
+    <div class="scroll">
+      <div class="big">Notes</div>
+      <div class="search">🔍 Search</div>
+      <div class="list" id="list"></div>
+    </div>
+    <div class="foot"><span id="jml"></span></div>
+  </div>
+
+  <!-- Isi catatan -->
+  <div class="page" id="detail">
+    <div class="nav" onclick="tutup()">
+      <span><svg class="s" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg>Notes</span>
+      <svg class="s" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="8" cy="12" r=".6"/><circle cx="12" cy="12" r=".6"/><circle cx="16" cy="12" r=".6"/></svg>
+    </div>
+    <div class="scroll">
+      <div class="tgl" id="dtgl"></div>
+      <div class="judul" id="djudul"></div>
+      <div class="isi" id="disi"></div>
+    </div>
+  </div>
+
+  <div class="home" onclick="location.href='home.html'"><i></i></div>
+</div>
+
+<script>
+// GANTI / TAMBAH catatan di sini. Tiap catatan ada judul, tanggal, dan isi.
+const catatan = [
+    { judul: 'Jadwal minggu ini', tanggal: 'Today', isi: 'Senin: praktikum anatomi 07.30\nSelasa: kuliah biokimia 09.00\nRabu: tutorial blok, jangan telat lagi\nKamis: kuis fisiologi\nJumat: kosong (bilang ke Hyuck!)\n\nSabtu-Minggu: tidur. janji. kalau ingkar tinggal janji lagi.' },
+  { judul: 'Buat Hyuck', tanggal: 'Yesterday', isi: 'Hal yang mau aku bilang ke Hyuck:\n\n- makan yang bener, jangan cuma kopi sama mie\n- kalau begadang ngerjain tugas maket, kabarin aku\n- kemarin aku nunggu 3 jam di perpus, dia malah lagi di lapangan\n\nTapi ya udahlah, dianya lagi ganteng banget.' },
+  { judul: 'Ngapalin dulu', tanggal: 'Thursday', isi: '12 nervus kranialis\nOlfaktorius, optikus, okulomotorius, troklearis, trigeminus, abdusens, fasialis, vestibulokoklearis, glosofaringeus, vagus, asesorius, hipoglosus\n\nUlangi sampai lancar!!' },
+  { judul: 'Kado ulang tahun Hyuck', tanggal: '20/10/2026', isi: 'Ide:\n- helm proyek baru (yang lama udah jelek banget)\n- voucher ramen, dia suka tori paitan\n- jaket kulit? dia sering liatin yang di toko\n\nBudget jangan lebih dari uang jajan bulan ini.' },
+  { judul: 'Belanja', tanggal: '18/10/2026', isi: '- kopi\n- roti tawar\n- plester dan antiseptik (buat Hyuck, kakinya sering luka kena besi)\n- es krim' }
+];
+
+const list = document.getElementById('list');
+catatan.forEach((c, i) => {
+  const d = document.createElement('div');
+  d.className = 'item';
+  d.innerHTML = '<b></b><small><em></em><span></span></small>';
+  d.querySelector('b').textContent = c.judul;
+  d.querySelector('em').textContent = c.tanggal;
+  d.querySelector('span').textContent = c.isi.split('\n')[0];
+  d.onclick = () => buka(i);
+  list.appendChild(d);
+});
+document.getElementById('jml').textContent = catatan.length + ' Notes';
+
+function buka(i) {
+  const c = catatan[i];
+  document.getElementById('dtgl').textContent = c.tanggal;
+  document.getElementById('djudul').textContent = c.judul;
+  document.getElementById('disi').textContent = c.isi;
+  document.getElementById('daftar').style.display = 'none';
+  document.getElementById('detail').style.display = 'flex';
+}
+function tutup() {
+  document.getElementById('detail').style.display = 'none';
+  document.getElementById('daftar').style.display = 'flex';
+}
+</script>
+</body>
+</html>

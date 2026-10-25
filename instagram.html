@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<title>Instagram</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;height:100vh;display:flex;justify-content:center;align-items:center;background:#0b0b0f;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}
+.hp{position:relative;height:92vh;aspect-ratio:390/844;font-size:1.7vh;border:.8vh solid #222;border-radius:6vh;overflow:hidden;color:#fff;background:#000}
+.pulau{position:absolute;top:1.4vh;left:50%;transform:translateX(-50%);width:13vh;height:4vh;background:#000;border-radius:3vh;z-index:6}
+.status{position:absolute;top:1.4vh;left:0;right:0;height:4vh;display:flex;justify-content:space-between;align-items:center;padding:0 2.4em;font-weight:600;z-index:5}
+.status .r{display:flex;align-items:center;gap:.4em}
+.status svg{fill:#fff;height:.8em;width:auto}
+.bt{width:1.9em;height:.95em;border:1px solid rgba(255,255,255,.55);border-radius:.3em;position:relative}
+.bt::before{content:"";position:absolute;left:1px;top:1px;bottom:1px;width:75%;background:#fff;border-radius:.15em}
+
+.page{position:absolute;inset:0;display:flex;flex-direction:column;padding-top:5.8vh}
+.wrap{flex:1;display:flex;flex-direction:column;min-height:0}
+#profil{display:none}
+.head{display:flex;justify-content:space-between;align-items:center;padding:.7em 1.1em;font-size:1.15em;font-weight:700}
+.head .ic{display:flex;gap:1em}
+.logo{font-size:1.3em;font-style:italic;letter-spacing:.02em}
+svg.s{width:1.5em;height:1.5em;fill:none;stroke:#fff;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.scroll{flex:1;min-height:0;overflow-y:auto;scrollbar-width:none}
+.scroll::-webkit-scrollbar{display:none}
+
+/* ===== FEED ===== */
+.post{padding-bottom:1.2em}
+.ph{display:flex;align-items:center;gap:.7em;padding:.6em 1em}
+.ph .a{width:2.5em;height:2.5em;border-radius:50%;background:#333 center/cover;border:1.5px solid #333}
+.ph b{font-size:.9em}
+.ph .m{margin-left:auto}
+.pic{aspect-ratio:1/1;background-color:#222}
+.act{display:flex;align-items:center;gap:1em;padding:.7em 1em .3em}
+.act .sp{margin-left:auto}
+.act .love.liked{fill:#ff3040;stroke:#ff3040}
+.act svg{cursor:pointer}
+.lk{padding:0 1em;font-size:.9em;font-weight:700}
+.cap{padding:.25em 1em;font-size:.9em;line-height:1.4}
+.cap b{margin-right:.4em}
+.kom{padding:.2em 1em;color:#8e8e93;font-size:.85em}
+.wkt{padding:.2em 1em;color:#8e8e93;font-size:.7em}
+
+/* ===== STORY ===== */
+.stories{display:flex;gap:1em;padding:.6em 1em .9em;overflow-x:auto;scrollbar-width:none;border-bottom:1px solid #1c1c1e}
+.stories::-webkit-scrollbar{display:none}
+.st{flex:none;width:4.9em;text-align:center;cursor:pointer}
+.ring{position:relative;width:4.7em;height:4.7em;border-radius:50%;padding:.18em;background:linear-gradient(135deg,#ffb35a,#e0348a,#7b3fe4);margin:0 auto}
+.ring.me{background:none;border:1px solid #333}
+.ring .p{width:100%;height:100%;border-radius:50%;background:#333 center/cover;border:.2em solid #000}
+.ring.me .p{border:0}
+.ring .plus{position:absolute;right:-.1em;bottom:-.1em;width:1.5em;height:1.5em;border-radius:50%;background:#0a84ff;border:.18em solid #000;display:grid;place-items:center;font-size:.9em;font-weight:700;line-height:1}
+.st span{display:block;font-size:.72em;margin-top:.4em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.st.lihat .ring{background:#3a3a3c}
+
+/* ===== PROFIL ===== */
+.prof{display:flex;align-items:center;gap:1.2em;padding:.4em 1.1em}
+.av{width:5.2em;height:5.2em;border-radius:50%;background:#333 center/cover;flex:none}
+.stat{flex:1;display:flex;justify-content:space-around;text-align:center}
+.stat b{display:block;font-size:1.1em}
+.stat span{font-size:.85em}
+.bio{padding:.5em 1.1em;font-size:.9em;line-height:1.45}
+.bio b{display:block}
+.btns{display:flex;gap:.5em;padding:.5em 1.1em .8em}
+.btns div{flex:1;text-align:center;background:#262626;border-radius:.6em;padding:.55em 0;font-size:.85em;font-weight:600}
+.hl{display:flex;gap:1.1em;padding:.2em 1.1em .9em}
+.hl div{text-align:center}
+.hl i{display:block;width:3.9em;height:3.9em;border-radius:50%;border:1px solid #3a3a3a;background:#1c1c1e center/cover;margin:0 auto .4em}
+.hl span{font-size:.75em}
+.tabs{display:flex;border-top:1px solid #262626}
+.tabs div{flex:1;display:grid;place-items:center;padding:.6em 0}
+.tabs .on{border-bottom:1.5px solid #fff}
+#g{display:grid;grid-template-columns:repeat(3,1fr);gap:1px}
+#g div{aspect-ratio:1;background-color:#222}
+
+/* ===== NAV ===== */
+.nav{display:flex;justify-content:space-around;align-items:center;padding:.8em 0 2.6em;border-top:1px solid #1c1c1e;background:#000}
+.nav svg{opacity:.55;cursor:pointer}
+.nav svg.on{opacity:1}
+.nav .me{width:1.6em;height:1.6em;border-radius:50%;background:#333 center/cover;border:1.5px solid #555;cursor:pointer}
+.nav .me.on{border-color:#fff}
+.home{position:absolute;bottom:0;left:0;right:0;height:2.2em;display:flex;justify-content:center;align-items:flex-end;padding-bottom:.6em;cursor:pointer;z-index:9}
+.home i{width:10em;height:.35em;border-radius:1em;background:#fff;display:block}
+</style>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><link rel="stylesheet" href="mobile.css"></head>
+<body>
+<div class="hp">
+  <div class="pulau"></div>
+
+  <div class="status">
+    <span>21:06</span>
+    <div class="r">
+      <svg viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx=".7"/><rect x="5" y="5.5" width="3" height="6.5" rx=".7"/><rect x="10" y="3" width="3" height="9" rx=".7"/><rect x="15" y="0" width="3" height="12" rx=".7"/></svg>
+      <svg viewBox="0 0 16 12"><path d="M8 2.4c2.2 0 4.2.9 5.7 2.3l1-1.1C12.9 1.9 10.6.9 8 .9S3.1 1.9 1.3 3.6l1 1.1C3.8 3.3 5.8 2.4 8 2.4zm0 3.6c1.2 0 2.3.5 3.2 1.2l1-1.1C11 5 9.6 4.4 8 4.4S5 5 3.8 6.1l1 1.1C5.7 6.5 6.8 6 8 6zm0 3.4L6.3 7.6c.5-.5 1.1-.7 1.7-.7s1.2.2 1.7.7L8 9.4z"/></svg>
+      <div class="bt"></div>
+    </div>
+  </div>
+
+  <div class="page">
+
+    <!-- ===== HOME FEED ===== -->
+    <div class="wrap" id="feedWrap">
+      <div class="head">
+        <span class="logo">Instagram</span>
+        <div class="ic">
+          <svg class="s" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>
+          <svg class="s" viewBox="0 0 24 24"><path d="M22 3L9.5 13.5M22 3l-7 18-5.5-7.5L2 10.5z"/></svg>
+        </div>
+      </div>
+      <div class="scroll" id="feed"></div>
+    </div>
+
+    <!-- ===== PROFIL ===== -->
+    <div class="wrap" id="profil">
+      <div class="head">
+        <span>jn_lee</span>
+        <div class="ic">
+          <svg class="s" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="17" height="17" rx="4"/><path d="M12 8v8M8 12h8"/></svg>
+          <svg class="s" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        </div>
+      </div>
+      <div class="scroll">
+        <div class="prof">
+          <div class="av"></div>
+          <div class="stat">
+            <div><b id="jml">6</b><span>posts</span></div>
+            <div><b>1,2K</b><span>followers</span></div>
+            <div><b>231</b><span>following</span></div>
+          </div>
+        </div>
+
+        <div class="bio">
+          <b>Jeno</b>
+          Kedokteran 🩺<br>
+          jam tidur: tidak ada<br>
+          hafalan numpuk, kopi juga numpuk ☕
+        </div>
+
+        <div class="btns"><div>Edit profile</div><div>Share profile</div></div>
+
+        <div class="hl">
+          <div><i data-f="sorotanus"></i><span>Us</span></div>
+          <div><i data-f="sorotancampus"></i><span>coolyeah</span></div>
+          <div><i data-f="sorotankopi"></i><span>kafein</span></div>
+          <div><i data-f="sorotanrandom"></i><span>rand0m</span></div>
+        </div>
+
+        <div class="tabs">
+          <div class="on"><svg class="s" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg></div>
+          <div><svg class="s" viewBox="0 0 24 24" style="opacity:.5"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg></div>
+        </div>
+
+        <div id="g"></div>
+      </div>
+    </div>
+
+    <div class="nav">
+      <svg class="s on" id="nHome" viewBox="0 0 24 24"><path d="M3 11l9-8 9 8v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>
+      <svg class="s" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+      <svg class="s" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="17" height="17" rx="4"/><path d="M12 8v8M8 12h8"/></svg>
+      <svg class="s" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>
+      <div class="me" id="nMe"></div>
+    </div>
+  </div>
+
+  <div class="home" onclick="location.href='home.html'"><i></i></div>
+</div>
+
+<script>
+// ====== DATA (ganti sesukamu) ======
+const akun = '_dhlee';             // username pemilik feed (Donghyuck)
+const fotoAkun = 'profilehc';      // foto profil akun feed (nama file tanpa .jpg)
+
+// Postingan di feed. 'foto' = nama file tanpa .jpg
+// Kalau 'akun' dikosongin, otomatis pakai akun Donghyuck (_dhlee).
+// 'avatar' = nama file foto profil akun lain (tanpa .jpg). Kalau filenya belum ada, bulatannya abu-abu.
+const feed = [
+  { foto:'dhleefeed', caption:'Less talk, more action', suka:1284, komen:56, waktu:'2 JAM YANG LALU' },
+  { akun:'fox.jpg', avatar:'fox', foto:'fox', caption:'new profile 🦊', suka:642, komen:19, waktu:'4 JAM YANG LALU' },
+  { foto:'post2', caption:'kata dosen, bangunan yang kuat itu soal fondasi. dengernya itu aja sih soalnya dikirimin pap sama si cantik.', suka:987, komen:41, waktu:'KEMARIN' },
+  { akun:'najaemin', avatar:'najaemin', foto:'najaemin', caption:'sunset', suka:1875, komen:87, waktu:'KEMARIN' },
+  { foto:'post3', caption:'my sayang prangat prengut', suka:1530, komen:78, waktu:'2 HARI YANG LALU' },
+  { akun:'cookieslovesu', avatar:'avatar-cookies', foto:'sorotanrandom', caption:'lucu banget ava sorotan jeno!!!', suka:903, komen:36, waktu:'2 HARI YANG LALU' },
+  { foto:'post4', caption:'ngambek, aku lama katanya', suka:864, komen:33, waktu:'3 HARI YANG LALU' },
+  { foto:'post5', caption:'di fotoin my sayang 😁', suka:1102, komen:62, waktu:'5 HARI YANG LALU' },
+  { foto:'post6', caption:'ada yang nungguin di perpus 3 jam, padahal aku di lapangan. maaf ya 🥺', suka:2010, komen:143, waktu:'1 MINGGU YANG LALU' }
+];
+
+// Foto grid di profil Jeno
+const post = ['post1','post2','post3','post4','post5','post6'];
+
+// ====== KODE ======
+function pasang(el, nama) {
+  const coba = [nama + '.jpg', nama + '.jpg.jpg'];
+  (function next(i) {
+    if (i >= coba.length) return;
+    const im = new Image();
+    im.onload = () => {
+      el.style.backgroundImage = "url('" + coba[i] + "')";
+      el.style.backgroundSize = 'cover';
+      el.style.backgroundPosition = 'center';
+    };
+    im.onerror = () => next(i + 1);
+    im.src = coba[i];
+  })(0);
+}
+
+const ikon = {
+  love:  '<svg class="s love" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>',
+  komen: '<svg class="s" viewBox="0 0 24 24"><path d="M21 12a8 8 0 0 1-11.6 7.1L3 21l1.9-5.4A8 8 0 1 1 21 12z"/></svg>',
+  kirim: '<svg class="s" viewBox="0 0 24 24"><path d="M22 3L9.5 13.5M22 3l-7 18-5.5-7.5L2 10.5z"/></svg>',
+  simpan:'<svg class="s sp" viewBox="0 0 24 24"><path d="M6 3h12v18l-6-4-6 4z"/></svg>',
+  titik: '<svg class="s m" viewBox="0 0 24 24"><circle cx="5" cy="12" r=".8"/><circle cx="12" cy="12" r=".8"/><circle cx="19" cy="12" r=".8"/></svg>'
+};
+
+const feedEl = document.getElementById('feed');
+
+// ====== STORY (ganti nama / foto di sini) ======
+const stories = [
+  { nama:'Your story', avatar:'profileig', saya:true },
+  { nama:akun, avatar:fotoAkun },
+  { nama:'fox.jpg', avatar:'fox' },
+  { nama:'najaemin', avatar:'najaemin' },
+  { nama:'cookieslovesu', avatar:'avatar-cookies' }
+];
+const baris = document.createElement('div');
+baris.className = 'stories';
+stories.forEach(s => {
+  const e = document.createElement('div');
+  e.className = 'st';
+  e.innerHTML = '<div class="ring' + (s.saya ? ' me' : '') + '"><div class="p"></div>' +
+                (s.saya ? '<div class="plus">+</div>' : '') + '</div><span></span>';
+  e.querySelector('span').textContent = s.nama;
+  pasang(e.querySelector('.p'), s.avatar);
+  e.onclick = () => { if (!s.saya) e.classList.add('lihat'); };
+  baris.appendChild(e);
+});
+feedEl.appendChild(baris);
+feed.forEach(p => {
+  const d = document.createElement('div');
+  d.className = 'post';
+  d.innerHTML =
+    '<div class="ph"><div class="a"></div><b></b>' + ikon.titik + '</div>' +
+    '<div class="pic"></div>' +
+    '<div class="act">' + ikon.love + ikon.komen + ikon.kirim + ikon.simpan + '</div>' +
+    '<div class="lk"></div>' +
+    '<div class="cap"><b></b><span></span></div>' +
+    '<div class="kom"></div>' +
+    '<div class="wkt"></div>';
+  pasang(d.querySelector('.a'), p.avatar || fotoAkun);
+  pasang(d.querySelector('.pic'), p.foto);
+  d.querySelector('.ph b').textContent = p.akun || akun;
+  d.querySelector('.cap b').textContent = p.akun || akun;
+  d.querySelector('.cap span').textContent = p.caption;
+  d.querySelector('.kom').textContent = 'Lihat semua ' + p.komen + ' komentar';
+  d.querySelector('.wkt').textContent = p.waktu;
+
+  const lk = d.querySelector('.lk');
+  const hati = d.querySelector('.love');
+  let suka = p.suka, liked = false;
+  const tulis = () => { lk.textContent = suka.toLocaleString('id-ID') + ' suka'; };
+  tulis();
+  hati.onclick = () => {
+    liked = !liked;
+    suka += liked ? 1 : -1;
+    hati.classList.toggle('liked', liked);
+    tulis();
+  };
+  feedEl.appendChild(d);
+});
+
+// Grid profil
+const g = document.getElementById('g');
+post.forEach(n => {
+  const d = document.createElement('div');
+  pasang(d, n);
+  g.appendChild(d);
+});
+document.getElementById('jml').textContent = post.length;
+
+document.querySelectorAll('.av').forEach(e => pasang(e, 'profileig'));
+pasang(document.getElementById('nMe'), 'profileig');
+document.querySelectorAll('.hl i').forEach(e => pasang(e, e.dataset.f));
+
+// Pindah tab Home <-> Profil
+const nHome = document.getElementById('nHome');
+const nMe = document.getElementById('nMe');
+nHome.onclick = () => {
+  document.getElementById('feedWrap').style.display = 'flex';
+  document.getElementById('profil').style.display = 'none';
+  nHome.classList.add('on'); nMe.classList.remove('on');
+};
+nMe.onclick = () => {
+  document.getElementById('feedWrap').style.display = 'none';
+  document.getElementById('profil').style.display = 'flex';
+  nMe.classList.add('on'); nHome.classList.remove('on');
+};
+</script>
+</body>
+</html>

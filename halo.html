@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<title>Lock Screen</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;height:100vh;display:flex;justify-content:center;align-items:center;background:#0b0b0f;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}
+.hp{position:relative;height:92vh;aspect-ratio:390/844;font-size:1.7vh;border:.8vh solid #222;border-radius:6vh;overflow:hidden;color:#fff;background:#111;user-select:none;touch-action:none}
+.bg2{position:absolute;inset:-2em;background:#111 center/cover;filter:blur(1.1em) brightness(.55)}
+.lay{position:absolute;inset:0;background:#111}
+.bg{position:absolute;inset:0;background:#111 center/cover}
+.bg::after{content:"";position:absolute;inset:0;background:linear-gradient(rgba(0,0,0,.35),rgba(0,0,0,.05) 35%,rgba(0,0,0,.05) 60%,rgba(0,0,0,.5))}
+.senter{position:absolute;inset:0;background:radial-gradient(circle at 50% 100%,rgba(255,255,230,.55),rgba(255,255,230,0) 70%);opacity:0;transition:opacity .3s;pointer-events:none}
+.senter.on{opacity:1}
+.pulau{position:absolute;top:1.4vh;left:50%;transform:translateX(-50%);width:13vh;height:4vh;background:#000;border-radius:3vh;z-index:20}
+.status{position:absolute;top:1.4vh;left:0;right:0;height:4vh;display:flex;justify-content:space-between;align-items:center;padding:0 2.4em;font-weight:600;font-size:.9em;z-index:5}
+.status .r{display:flex;align-items:center;gap:.4em}
+.status svg{fill:#fff;height:.85em;width:auto}
+.bt{width:1.9em;height:.95em;border:1px solid rgba(255,255,255,.55);border-radius:.3em;position:relative}
+.bt::before{content:"";position:absolute;left:1px;top:1px;bottom:1px;width:75%;background:#fff;border-radius:.15em}
+.gembok{position:absolute;top:5.1em;left:50%;transform:translateX(-50%);width:1.3em;height:1.3em}
+.gembok svg{width:100%;height:100%;fill:none;stroke:#fff;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.tengah{position:absolute;top:7.2em;left:0;right:0;text-align:center;text-shadow:0 .05em .5em rgba(0,0,0,.35)}
+.tgl{font-size:1.2em;font-weight:500;margin:0}
+.jam{font-size:6.4em;font-weight:700;line-height:1;margin:.05em 0 0;letter-spacing:-.02em}
+.chip{display:flex;justify-content:center;gap:.6em;margin-top:.9em}
+.chip div{background:rgba(255,255,255,.2);backdrop-filter:blur(.8em);-webkit-backdrop-filter:blur(.8em);border-radius:2em;padding:.4em .9em;font-size:.82em;font-weight:500;white-space:nowrap}
+
+/* ===== NOTIFIKASI ===== */
+.notif{position:absolute;left:.8em;right:.8em;bottom:9.4em;display:flex;flex-direction:column;gap:.5em}
+.n{display:flex;align-items:center;gap:.75em;background:rgba(70,70,76,.42);backdrop-filter:blur(1.4em) saturate(1.3);-webkit-backdrop-filter:blur(1.4em) saturate(1.3);border-radius:1.4em;padding:.65em .8em;cursor:pointer;position:relative;z-index:3}
+.n.baru{animation:masuk .45s ease}
+.n:active{transform:scale(.985)}
+@keyframes masuk{from{opacity:0;transform:translateY(-1.2em) scale(.96)}to{opacity:1;transform:none}}
+.n .ic{width:2.5em;height:2.5em;border-radius:.62em;display:grid;place-items:center;flex:none;overflow:hidden}
+.n .ic svg{width:1.5em;height:1.5em;fill:#fff}
+.n .tx{flex:1;min-width:0}
+.n .tx b{display:block;font-size:.92em;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.n .tx span{font-size:.85em;color:rgba(255,255,255,.9);line-height:1.25;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.n small{color:rgba(255,255,255,.62);font-size:.72em;align-self:flex-start;flex:none}
+.stack{position:relative;padding-bottom:.95em;cursor:pointer}
+.peek{position:absolute;bottom:0;height:3.2em;border-radius:1.4em;background:rgba(70,70,76,.3);backdrop-filter:blur(1.2em);-webkit-backdrop-filter:blur(1.2em);z-index:1}
+.peek.p1{left:.7em;right:.7em;bottom:.45em;z-index:2;background:rgba(70,70,76,.36)}
+.peek.p2{left:1.4em;right:1.4em;bottom:0}
+.lagi{align-self:center;background:rgba(70,70,76,.5);backdrop-filter:blur(1em);-webkit-backdrop-filter:blur(1em);border-radius:2em;padding:.35em 1em;font-size:.75em;font-weight:500;cursor:pointer}
+
+.btn{position:absolute;bottom:3.7em;width:3.6em;height:3.6em;border-radius:50%;background:rgba(30,30,34,.5);backdrop-filter:blur(1em);-webkit-backdrop-filter:blur(1em);display:grid;place-items:center;cursor:pointer;z-index:7}
+.btn svg{width:1.6em;height:1.6em;fill:none;stroke:#fff;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.btn.on{background:#fff}
+.btn.on svg{stroke:#000}
+.btn.kiri{left:2.2em}
+.btn.kanan{right:2.2em}
+.barhit{position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:14em;height:2.2em;display:flex;justify-content:center;align-items:flex-end;padding-bottom:.6em;cursor:grab;z-index:8}
+.barhit i{display:block;width:10em;height:.35em;border-radius:1em;background:#fff}
+</style>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><link rel="stylesheet" href="mobile.css"></head>
+<body>
+<div class="hp" id="hp">
+  <div class="bg2" id="bg2"></div>
+
+  <div class="lay" id="lay">
+    <div class="bg" id="bg"></div>
+    <div class="senter" id="senter"></div>
+
+    <div class="status">
+      <span>Telkomsel</span>
+      <div class="r">
+        <svg viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx=".7"/><rect x="5" y="5.5" width="3" height="6.5" rx=".7"/><rect x="10" y="3" width="3" height="9" rx=".7"/><rect x="15" y="0" width="3" height="12" rx=".7"/></svg>
+        <svg viewBox="0 0 16 12"><path d="M8 2.4c2.2 0 4.2.9 5.7 2.3l1-1.1C12.9 1.9 10.6.9 8 .9S3.1 1.9 1.3 3.6l1 1.1C3.8 3.3 5.8 2.4 8 2.4zm0 3.6c1.2 0 2.3.5 3.2 1.2l1-1.1C11 5 9.6 4.4 8 4.4S5 5 3.8 6.1l1 1.1C5.7 6.5 6.8 6 8 6zm0 3.4L6.3 7.6c.5-.5 1.1-.7 1.7-.7s1.2.2 1.7.7L8 9.4z"/></svg>
+        <div class="bt"></div>
+      </div>
+    </div>
+
+    <div class="gembok"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2.5"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></div>
+
+    <div class="tengah">
+      <p class="tgl" id="tgl"></p>
+      <h1 class="jam" id="jam"></h1>
+      <div class="chip" id="chip"></div>
+    </div>
+
+    <div class="notif" id="notif"></div>
+
+    <div class="btn kiri" id="bSenter"><svg viewBox="0 0 24 24"><path d="M8 3h8l-1 5H9zM9 8v3l-1 2v8h8v-8l-1-2V8"/></svg></div>
+    <div class="btn kanan" id="bKamera"><svg viewBox="0 0 24 24"><path d="M9 4L7.6 6H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-2.6L15 4z"/><circle cx="12" cy="13" r="3.8"/></svg></div>
+
+    <div class="barhit" id="bar"><i></i></div>
+  </div>
+
+  <div class="pulau"></div>
+</div>
+
+<script>
+// =====================================================================
+//  GANTI DI SINI
+// =====================================================================
+const TANGGAL = 'Sabtu, 24 Oktober';
+const JAM = '21:06';
+const FOTO = 'foto';          // nama file wallpaper (tanpa .jpg)
+
+// Tiga bulatan kecil di bawah jam
+const widget = ['☁️ 24°', '🔋 78%', '📅 20:00 Es krim'];
+
+// Notifikasi awal. ms = jeda muncul (milidetik). Yang muncul paling akhir ada di paling atas.
+// app: pesan | telepon | ig | kalender | musik     ke: halaman yang dibuka setelah passcode
+const notif = [
+  { ms: 1900, app: 'pesan',    judul: 'Hyuck 💕',      isi: 'kok belum bales dari tadi',            waktu: 'now',     ke: 'pesan.html' },
+  { ms: 1400, app: 'telepon',  judul: 'Missed Call',   isi: 'Hyuck 💕 (2)',                         waktu: '8m ago',  ke: 'telepon.html' },
+  { ms: 900,  app: 'ig',       judul: 'Instagram',     isi: '_dhlee menyukai fotomu.',              waktu: '22m ago', ke: 'instagram.html' },
+  { ms: 400,  app: 'kalender', judul: 'Calendar',      isi: 'Makan es krim sama Hyuck 💕 · 20:00',  waktu: '1h ago',  ke: 'kalender.html' }
+];
+
+// Notifikasi susulan (masuk belakangan dari atas). Kosongkan isinya kalau tidak mau.
+const susulan = [
+  { ms: 7000,  app: 'pesan', judul: 'Mami',  isi: 'Nak, udah makan?',            waktu: 'now', ke: 'pesan.html' },
+  { ms: 14000, app: 'pesan', judul: 'Karin', isi: 'JEN JAWAB DONG ITU SIAPA 😭', waktu: 'now', ke: 'pesan.html' }
+];
+
+const MAKS_TAMPIL = 4;   // jumlah notifikasi yang kelihatan waktu tumpukan dibuka
+
+// =====================================================================
+//  KODE
+// =====================================================================
+const $ = id => document.getElementById(id);
+$('tgl').textContent = TANGGAL;
+$('jam').textContent = JAM;
+$('chip').innerHTML = widget.map(w => '<div>' + w + '</div>').join('');
+
+function pasang(el, nama) {
+  const coba = [nama + '.jpg', nama + '.jpg.jpg'];
+  (function next(i) {
+    if (i >= coba.length) return;
+    const im = new Image();
+    im.onload = () => { el.style.backgroundImage = "url('" + coba[i] + "')"; };
+    im.onerror = () => next(i + 1);
+    im.src = coba[i];
+  })(0);
+}
+pasang($('bg'), FOTO);
+pasang($('bg2'), FOTO);
+
+const IKON = {
+  pesan:   ['linear-gradient(#67f27f,#17c33a)', '<svg viewBox="0 0 24 24"><path d="M12 4C6.5 4 2.5 7.4 2.5 11.6c0 2.4 1.3 4.5 3.4 5.9-.3 1.3-1 2.4-1.9 3.3 1.8-.1 3.4-.8 4.7-1.8.9.2 1.8.3 2.8.3 5.5 0 9.5-3.4 9.5-7.7S17.5 4 12 4z"/></svg>'],
+  telepon: ['linear-gradient(#67f27f,#17c33a)', '<svg viewBox="0 0 24 24"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1l-2.3 2.2z"/></svg>'],
+  ig:      ['linear-gradient(135deg,#ff9a5a,#e0348a,#7b3fe4)', '<svg viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>'],
+  musik:   ['linear-gradient(#ff6a88,#fa233b)', '<svg viewBox="0 0 24 24"><path d="M9 17V6l10-2v11" fill="none" stroke="#fff" stroke-width="1.8"/><circle cx="7" cy="17" r="2.5"/><circle cx="17" cy="15" r="2.5"/></svg>']
+};
+const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;');
+
+function ikon(app) {
+  if (app === 'kalender') return '<div class="ic" style="background:#fff;color:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1"><span style="color:#ff3b30;font-size:.5em;font-weight:700">SAB</span><b style="font-size:1.15em;font-weight:400">24</b></div>';
+  const i = IKON[app] || IKON.pesan;
+  return '<div class="ic" style="background:' + i[0] + '">' + i[1] + '</div>';
+}
+function kartu(n) {
+  return '<div class="n' + (n._baru ? ' baru' : '') + '" data-ke="' + esc(n.ke) + '">' + ikon(n.app) +
+    '<div class="tx"><b>' + esc(n.judul) + '</b><span>' + esc(n.isi) + '</span></div><small>' + esc(n.waktu) + '</small></div>';
+}
+
+let tumpukan = [], terbuka = false;   // terbaru di depan
+function gambarNotif() {
+  const box = $('notif');
+  if (!tumpukan.length) { box.innerHTML = ''; return; }
+  if (!terbuka && tumpukan.length > 1) {
+    const peek = Math.min(2, tumpukan.length - 1);
+    let h = '<div class="stack" id="stack">';
+    for (let i = peek; i >= 1; i--) h += '<div class="peek p' + i + '"></div>';
+    h += kartu(tumpukan[0]) + '</div>';
+    box.innerHTML = h;
+  } else {
+    const lihat = tumpukan.slice(0, MAKS_TAMPIL);
+    const sisa = tumpukan.length - lihat.length;
+    box.innerHTML = lihat.map(kartu).join('') +
+      (sisa > 0 ? '<div class="lagi" id="tutupStack">+' + sisa + ' more · Show Less</div>' : (tumpukan.length > 1 ? '<div class="lagi" id="tutupStack">Show Less</div>' : ''));
+  }
+  tumpukan.forEach(n => n._baru = false);
+}
+function tambah(n) { n._baru = true; tumpukan.unshift(n); gambarNotif(); }
+
+notif.forEach(n => setTimeout(() => tambah(Object.assign({}, n)), n.ms));
+susulan.forEach(n => setTimeout(() => tambah(Object.assign({}, n)), n.ms));
+
+// ---------- BUKA KUNCI ----------
+const hp = $('hp'), lay = $('lay');
+let sedangPergi = false;
+function buka(ke) {
+  if (sedangPergi) return;
+  sedangPergi = true;
+  lay.style.transition = 'transform .32s ease-in';
+  lay.style.transform = 'translateY(-105%)';
+  setTimeout(() => { location.href = 'passcode.html' + (ke ? '?ke=' + encodeURIComponent(ke) : ''); }, 320);
+}
+
+// Geser ke atas pakai mouse
+let awal = null, dy = 0, geser = false, t0 = 0;
+hp.addEventListener('pointerdown', e => {
+  if (e.button !== 0 || sedangPergi) return;
+  awal = e.clientY; dy = 0; geser = false; t0 = Date.now();
+});
+window.addEventListener('pointermove', e => {
+  if (awal === null) return;
+  dy = awal - e.clientY;
+  if (dy > 6) {
+    geser = true;
+    lay.style.transition = 'none';
+    lay.style.transform = 'translateY(' + (-Math.max(0, dy)) + 'px)';
+  }
+});
+window.addEventListener('pointerup', () => {
+  if (awal === null) return;
+  const tinggi = hp.clientHeight;
+  const cepat = dy / Math.max(1, Date.now() - t0) > 0.6;
+  if (geser) {
+    if (dy > tinggi * 0.22 || cepat) buka();
+    else { lay.style.transition = 'transform .3s ease'; lay.style.transform = ''; }
+    setTimeout(() => { geser = false; }, 60);
+  }
+  awal = null;
+});
+
+// ---------- KLIK ----------
+hp.addEventListener('click', e => {
+  if (geser) return;
+  if (e.target.closest('#tutupStack')) { terbuka = false; gambarNotif(); return; }
+  const stack = e.target.closest('#stack');
+  if (stack) { terbuka = true; gambarNotif(); return; }
+  const n = e.target.closest('.n');
+  if (n) { buka(n.dataset.ke); return; }
+  if (e.target.closest('#bar')) { buka(); }
+});
+$('bSenter').addEventListener('click', e => {
+  e.stopPropagation();
+  $('bSenter').classList.toggle('on');
+  $('senter').classList.toggle('on');
+});
+$('bKamera').addEventListener('click', e => e.stopPropagation());
+document.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ' || e.key === 'ArrowUp') { e.preventDefault(); buka(); } });
+</script>
+</body>
+</html>

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<title>Safari</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;height:100vh;display:flex;justify-content:center;align-items:center;background:#0b0b0f;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}
+.hp{position:relative;height:92vh;aspect-ratio:390/844;font-size:1.7vh;border:.8vh solid #222;border-radius:6vh;overflow:hidden;color:#fff;background:#000}
+.pulau{position:absolute;top:1.4vh;left:50%;transform:translateX(-50%);width:13vh;height:4vh;background:#000;border-radius:3vh;z-index:12}
+.status{position:absolute;top:1.4vh;left:0;right:0;height:4vh;display:flex;justify-content:space-between;align-items:center;padding:0 2.4em;font-weight:600;z-index:11}
+.status .r{display:flex;align-items:center;gap:.4em}
+.status svg{fill:#fff;height:.8em;width:auto}
+.bt{width:1.9em;height:.95em;border:1px solid rgba(255,255,255,.55);border-radius:.3em;position:relative}
+.bt::before{content:"";position:absolute;left:1px;top:1px;bottom:1px;width:75%;background:#fff;border-radius:.15em}
+
+.page{position:absolute;inset:0;display:flex;flex-direction:column;padding-top:5.8vh;background:#000}
+.nav{display:flex;justify-content:flex-end;padding:.7em 1.2em;color:#0a84ff;font-size:1em;font-weight:600;cursor:pointer}
+.scroll{flex:1;min-height:0;overflow-y:auto;scrollbar-width:none;padding:0 1.1em}
+.scroll::-webkit-scrollbar{display:none}
+.big{font-size:2em;font-weight:700;padding:.1em 0 .4em}
+.cari{display:flex;align-items:center;gap:.5em;background:#1c1c1e;border-radius:.7em;padding:.55em .8em;margin-bottom:1em}
+.cari input{flex:1;background:none;border:0;outline:0;color:#fff;font-size:.95em;font-family:inherit}
+.cari input::placeholder{color:#8e8e93}
+.hari{color:#8e8e93;font-size:.8em;font-weight:600;text-transform:uppercase;padding:.8em .4em .4em}
+.list{background:#1c1c1e;border-radius:.9em;overflow:hidden}
+.item{display:flex;align-items:center;gap:.8em;padding:.65em .9em;position:relative}
+.item + .item::before{content:"";position:absolute;top:0;left:3.6em;right:0;height:1px;background:#2c2c2e}
+.fav{flex:none;width:2.2em;height:2.2em;border-radius:.55em;display:grid;place-items:center;font-weight:700;font-size:.9em}
+.t{flex:1;min-width:0}
+.t b{display:block;font-size:.92em;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.t small{display:block;color:#8e8e93;font-size:.78em;margin-top:.15em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kosong{text-align:center;color:#8e8e93;padding:6em 0;font-size:1.1em}
+.foot{display:flex;justify-content:space-between;align-items:center;padding:.9em 1.4em 2.8em;background:#1c1c1e;color:#0a84ff;font-size:.95em}
+.foot span{cursor:pointer}
+.home{position:absolute;bottom:0;left:0;right:0;height:2.2em;display:flex;justify-content:center;align-items:flex-end;padding-bottom:.6em;cursor:pointer;z-index:13}
+.home i{width:10em;height:.35em;border-radius:1em;background:#fff;display:block}
+</style>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><link rel="stylesheet" href="mobile.css"></head>
+<body>
+<div class="hp">
+  <div class="pulau"></div>
+
+  <div class="status">
+    <span>21:06</span>
+    <div class="r">
+      <svg viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx=".7"/><rect x="5" y="5.5" width="3" height="6.5" rx=".7"/><rect x="10" y="3" width="3" height="9" rx=".7"/><rect x="15" y="0" width="3" height="12" rx=".7"/></svg>
+      <svg viewBox="0 0 16 12"><path d="M8 2.4c2.2 0 4.2.9 5.7 2.3l1-1.1C12.9 1.9 10.6.9 8 .9S3.1 1.9 1.3 3.6l1 1.1C3.8 3.3 5.8 2.4 8 2.4zm0 3.6c1.2 0 2.3.5 3.2 1.2l1-1.1C11 5 9.6 4.4 8 4.4S5 5 3.8 6.1l1 1.1C5.7 6.5 6.8 6 8 6zm0 3.4L6.3 7.6c.5-.5 1.1-.7 1.7-.7s1.2.2 1.7.7L8 9.4z"/></svg>
+      <div class="bt"></div>
+    </div>
+  </div>
+
+  <div class="page">
+    <div class="nav" onclick="location.href='home.html'">Done</div>
+    <div class="scroll">
+      <div class="big">History</div>
+      <div class="cari">🔍<input id="q" type="text" placeholder="Search History"></div>
+      <div id="isi"></div>
+    </div>
+    <div class="foot"><span>&nbsp;</span><span id="hapus">Clear</span></div>
+  </div>
+
+  <div class="home" onclick="location.href='home.html'"><i></i></div>
+</div>
+
+<script>
+// ====== GANTI / TAMBAH RIWAYAT DI SINI ======
+// Tiap hari punya daftar 'item': judul halaman dan alamat websitenya.
+const riwayat = [
+  { hari: 'Today', item: [
+    { judul: 'cara bikin kejutan ulang tahun pacar - Google Search', url: 'google.com' },
+    { judul: 'toko es krim stroberi terdekat - Google Maps', url: 'google.com/maps' },
+    { judul: 'harga jaket kulit pria original', url: 'tokopedia.com' },
+    { judul: 'cara obatin luka kena besi karat', url: 'alodokter.com' }
+  ]},
+  { hari: 'Yesterday', item: [
+    { judul: 'jadwal praktikum anatomi semester 5', url: 'portal.kampus.ac.id' },
+    { judul: 'kenapa pacar suka begadang ngerjain tugas gambar - Google Search', url: 'google.com' },
+    { judul: 'teknik sipil itu belajar apa aja', url: 'kompas.com' },
+    { judul: 'playlist buat nemenin begadang', url: 'spotify.com' }
+  ]},
+  { hari: 'Thursday', item: [
+    { judul: 'cara minta maaf yang tulus ke pacar - Google Search', url: 'google.com' },
+    { judul: 'singkatan mudah hafal 12 nervus kranialis', url: 'google.com' },
+    { judul: 'tips makan sehat buat anak teknik', url: 'halodoc.com' }
+  ]},
+  { hari: '20/10/2026', item: [
+    { judul: 'ide kado ulang tahun cowok yang suka es krim', url: 'google.com' },
+    { judul: 'helm proyek terbaik buat pemula', url: 'tokopedia.com' }
+  ]}
+];
+
+// ====== KODE ======
+const warna = [['#0a84ff','#fff'],['#ff9f0a','#000'],['#30d158','#000'],['#bf5af2','#fff'],['#ff453a','#fff'],['#64d2ff','#000']];
+const isi = document.getElementById('isi');
+const q = document.getElementById('q');
+let data = riwayat;
+
+function huruf(url) { return url.replace(/^[^a-z0-9]*/i, '').charAt(0).toUpperCase(); }
+
+function render() {
+  const cari = q.value.trim().toLowerCase();
+  isi.innerHTML = '';
+  let ada = false;
+  data.forEach(h => {
+    const cocok = h.item.filter(x => !cari || x.judul.toLowerCase().includes(cari) || x.url.toLowerCase().includes(cari));
+    if (!cocok.length) return;
+    ada = true;
+    const j = document.createElement('div'); j.className = 'hari'; j.textContent = h.hari;
+    const l = document.createElement('div'); l.className = 'list';
+    cocok.forEach(x => {
+      const w = warna[(x.url.charCodeAt(0) + x.url.length) % warna.length];
+      const e = document.createElement('div'); e.className = 'item';
+      e.innerHTML = '<div class="fav"></div><div class="t"><b></b><small></small></div>';
+      const f = e.querySelector('.fav');
+      f.textContent = huruf(x.url); f.style.background = w[0]; f.style.color = w[1];
+      e.querySelector('b').textContent = x.judul;
+      e.querySelector('small').textContent = x.url;
+      l.appendChild(e);
+    });
+    isi.appendChild(j); isi.appendChild(l);
+  });
+  if (!ada) {
+    const k = document.createElement('div'); k.className = 'kosong';
+    k.textContent = cari ? 'No Results' : 'No History';
+    isi.appendChild(k);
+  }
+}
+q.oninput = render;
+document.getElementById('hapus').onclick = () => { data = []; render(); };
+render();
+</script>
+</body>
+</html>

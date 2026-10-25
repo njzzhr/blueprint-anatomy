@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<title>Messages</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;height:100vh;display:flex;justify-content:center;align-items:center;background:#0b0b0f;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}
+.hp{position:relative;height:92vh;aspect-ratio:390/844;font-size:1.7vh;border:.8vh solid #222;border-radius:6vh;overflow:hidden;color:#fff;background:#000}
+.pulau{position:absolute;top:1.4vh;left:50%;transform:translateX(-50%);width:13vh;height:4vh;background:#000;border-radius:3vh;z-index:60}
+.status{position:absolute;top:1.4vh;left:0;right:0;height:4vh;display:flex;justify-content:space-between;align-items:center;padding:0 2.4em;font-weight:600;z-index:59}
+.status .r{display:flex;align-items:center;gap:.4em}
+.status svg{fill:#fff;height:.8em;width:auto}
+.bt{width:1.9em;height:.95em;border:1px solid rgba(255,255,255,.55);border-radius:.3em;position:relative}
+.bt::before{content:"";position:absolute;left:1px;top:1px;bottom:1px;width:75%;background:#fff;border-radius:.15em}
+
+.pg{position:absolute;inset:0;display:none;flex-direction:column;padding-top:5.8vh;background:#000}
+.pg.on{display:flex}
+.ava{border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:600;background-size:cover;background-position:center;flex:none}
+
+/* ===== INBOX ===== */
+.nav{display:flex;justify-content:space-between;align-items:center;padding:.7em 1.1em;color:#0a84ff;font-size:1em;min-height:2.6em}
+.nav svg{width:1.4em;height:1.4em;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.sc{flex:1;min-height:0;overflow-y:auto;scrollbar-width:none;padding-bottom:3.4em}
+.sc::-webkit-scrollbar{display:none}
+.big{font-size:2em;font-weight:700;padding:.1em 1.1em .35em}
+.cari{display:flex;align-items:center;gap:.5em;background:#1c1c1e;border-radius:.8em;margin:0 1.1em .8em;padding:.55em .8em}
+.cari input{flex:1;background:none;border:0;outline:0;color:#fff;font-size:.95em;font-family:inherit}
+.cari input::placeholder{color:#8e8e93}
+.pinned{display:flex;gap:.5em;justify-content:space-around;padding:0 .8em .6em}
+.pn{position:relative;width:5.6em;text-align:center;cursor:pointer}
+.pn .ava{margin:0 auto .35em}
+.pn b{display:block;font-size:.78em;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pn .dot{position:absolute;top:-.2em;right:.2em;min-width:1.5em;height:1.5em;padding:0 .35em;border-radius:1em;background:#0a84ff;font-size:.72em;font-style:normal;font-weight:600;display:grid;place-items:center;border:.15em solid #000}
+.cv{display:flex;gap:.8em;padding:.7em 1.1em;cursor:pointer;position:relative}
+.cv + .cv::before,.pinned + .lst .cv:first-child::before{content:"";position:absolute;top:0;left:5.4em;right:0;height:1px;background:#1f1f21}
+.cv .tx{flex:1;min-width:0}
+.r1{display:flex;justify-content:space-between;align-items:baseline;gap:.5em}
+.r1 b{font-size:1em;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.r1 .w{color:#8e8e93;font-size:.78em;flex:none}
+.r2{display:flex;justify-content:space-between;align-items:flex-start;gap:.6em;margin-top:.15em}
+.pv{color:#8e8e93;font-size:.86em;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.bd{flex:none;min-width:1.7em;height:1.7em;padding:0 .4em;border-radius:1em;background:#0a84ff;font-size:.75em;font-style:normal;font-weight:600;display:grid;place-items:center}
+.bd.mt{background:#48484a}
+
+/* ===== THREAD ===== */
+.hd{position:relative;padding:.3em 1em .5em;text-align:center;background:#161618;border-bottom:1px solid #222;flex:none}
+.hd .bk{position:absolute;left:.9em;top:1.1em;color:#0a84ff;font-size:1.05em;cursor:pointer;display:flex;align-items:center;gap:.1em}
+.hd .bk svg{width:1.4em;height:1.4em;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.hd .bk span{background:#0a84ff;color:#fff;font-size:.75em;font-weight:600;border-radius:1em;padding:.05em .55em}
+.hd .ik2{position:absolute;right:1em;top:1.1em;display:flex;gap:1em}
+.hd .ik2 svg{width:1.5em;height:1.5em;fill:#0a84ff}
+.hd .ava{margin:0 auto .25em}
+.hd b{font-size:.8em;font-weight:500}
+.hd small{display:block;color:#8e8e93;font-size:.68em}
+.ms{flex:1;min-height:0;overflow-y:auto;scrollbar-width:none;padding:.4em 1em 1em}
+.ms::-webkit-scrollbar{display:none}
+.sep{text-align:center;color:#8e8e93;font-size:.72em;margin:.9em 0 .4em}
+.sep b{font-weight:600}
+.sn{font-size:.7em;margin:.5em 0 .1em .9em}
+.m{max-width:74%;padding:.55em .9em;border-radius:1.2em;font-size:.98em;margin:.15em 0;line-height:1.3;width:fit-content;word-wrap:break-word;animation:muncul .2s}
+.m.in{background:#262629}
+.m.out{background:#0a84ff;margin-left:auto}
+.dlv{text-align:right;color:#8e8e93;font-size:.68em;margin:.1em .4em}
+@keyframes muncul{from{opacity:0;transform:translateY(.5em)}to{opacity:1;transform:none}}
+.inp{display:flex;align-items:center;gap:.6em;padding:.5em .8em 2.6em;flex:none}
+.inp .pl{width:2.2em;height:2.2em;border-radius:50%;background:#2c2c2e;display:grid;place-items:center;font-size:1.2em;color:#aaa;flex:none}
+.inp .kol{flex:1;border:1px solid #3a3a3c;border-radius:2em;padding:.35em .5em .35em 1em;display:flex;align-items:center}
+.inp input{flex:1;background:none;border:0;outline:0;color:#fff;font-size:.95em;font-family:inherit;min-width:0}
+.inp input::placeholder{color:#6e6e73}
+.kirim{width:1.9em;height:1.9em;border-radius:50%;background:#0a84ff;display:none;place-items:center;cursor:pointer;flex:none}
+.kirim.on{display:grid}
+.kirim svg{width:1em;height:1em;fill:none;stroke:#fff;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+.rep{padding:.8em 1em 2.8em;text-align:center;font-size:.8em;color:#8e8e93;background:#161618;flex:none}
+.rep b{display:block;color:#0a84ff;font-size:1.15em;margin-top:.3em}
+
+/* ===== BANNER NOTIFIKASI ===== */
+.ban{position:absolute;top:-9em;left:.6em;right:.6em;background:rgba(52,52,56,.97);border-radius:1.6em;padding:.7em .9em;display:flex;gap:.8em;align-items:center;z-index:70;transition:top .35s;box-shadow:0 .3em 1.2em rgba(0,0,0,.6);cursor:pointer}
+.ban.on{top:5.4em}
+.ban .bi{width:2.6em;height:2.6em;border-radius:.65em;background:linear-gradient(#67f27f,#17c33a);display:grid;place-items:center;flex:none}
+.ban .bi svg{width:1.6em;height:1.6em;fill:#fff}
+.ban .bb{flex:1;min-width:0}
+.ban .bb b{display:block;font-size:.9em;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ban .bb span{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:.85em;color:#d0d0d4;line-height:1.3}
+.ban small{color:#8e8e93;font-size:.72em;align-self:flex-start;flex:none}
+
+.home{position:absolute;bottom:0;left:0;right:0;height:2.2em;display:flex;justify-content:center;align-items:flex-end;padding-bottom:.6em;cursor:pointer;z-index:65}
+.home i{width:10em;height:.35em;border-radius:1em;background:#fff;display:block}
+</style>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><link rel="stylesheet" href="mobile.css"></head>
+<body>
+<div class="hp">
+  <div class="pulau"></div>
+
+  <div class="status">
+    <span>21:06</span>
+    <div class="r">
+      <svg viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx=".7"/><rect x="5" y="5.5" width="3" height="6.5" rx=".7"/><rect x="10" y="3" width="3" height="9" rx=".7"/><rect x="15" y="0" width="3" height="12" rx=".7"/></svg>
+      <svg viewBox="0 0 16 12"><path d="M8 2.4c2.2 0 4.2.9 5.7 2.3l1-1.1C12.9 1.9 10.6.9 8 .9S3.1 1.9 1.3 3.6l1 1.1C3.8 3.3 5.8 2.4 8 2.4zm0 3.6c1.2 0 2.3.5 3.2 1.2l1-1.1C11 5 9.6 4.4 8 4.4S5 5 3.8 6.1l1 1.1C5.7 6.5 6.8 6 8 6zm0 3.4L6.3 7.6c.5-.5 1.1-.7 1.7-.7s1.2.2 1.7.7L8 9.4z"/></svg>
+      <div class="bt"></div>
+    </div>
+  </div>
+
+  <!-- ===== BERANDA CHAT ===== -->
+  <div class="pg on" id="inbox">
+    <div class="nav">
+      <span>Edit</span>
+      <svg viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>
+    </div>
+    <div class="sc">
+      <div class="big">Messages</div>
+      <div class="cari">🔍<input id="q" type="text" placeholder="Search"></div>
+      <div class="pinned" id="pinned"></div>
+      <div class="lst" id="lst"></div>
+    </div>
+  </div>
+
+  <!-- ===== ISI PERCAKAPAN ===== -->
+  <div class="pg" id="thread">
+    <div class="hd" id="hd"></div>
+    <div class="ms" id="ms"></div>
+    <div class="inp" id="inpBar">
+      <div class="pl">+</div>
+      <div class="kol"><input id="inp" type="text" placeholder="iMessage" autocomplete="off"><div class="kirim" id="kirim"><svg viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"/></svg></div></div>
+    </div>
+    <div class="rep" id="rep" style="display:none">This sender is not in your contacts.<b>Report Junk</b></div>
+  </div>
+
+  <!-- ===== BANNER ===== -->
+  <div class="ban" id="ban"></div>
+
+  <div class="home" onclick="location.href='home.html'"><i></i></div>
+</div>
+
+<script>
+// =====================================================================
+//  DATA — GANTI / TAMBAH SESUKAMU
+// =====================================================================
+// Setiap orang / grup: n = nama, w = warna lingkaran, foto = nama file foto (tanpa .jpg, opsional)
+const K = {
+  hyuck:  { n: 'Hyuck 💕',            w: ['#ff6a88', '#c2185b'], foto: 'profilehc' },
+  mami:   { n: 'Mami',                w: ['#ffb35a', '#d9622b'] },
+  karin:  { n: 'Karin',               w: ['#bf5af2', '#6a2e8c'] },
+  seulgi: { n: 'Kak Seulgi',          w: ['#5ac8fa', '#1a6aa0'] },
+  aryo:   { n: 'dr. Aryo',            w: ['#8e8e93', '#48484a'] },
+  tante:  { n: 'Tante Ratna',         w: ['#ff9f0a', '#a55a00'] },
+  rafi:   { n: 'Rafi',                w: ['#30d158', '#0a6a2a'] },
+  nadia:  { n: 'Nadia',               w: ['#ff375f', '#8a1030'] },
+  bimo:   { n: 'Bimo',                w: ['#64d2ff', '#1a5a8a'] },
+  salsa:  { n: 'Kak Salsa (BEM)',     w: ['#5e5ce6', '#2a2a8a'] },
+  fajar:  { n: 'Fajar',               w: ['#ffd60a', '#8a6a00'] },
+  tiara:  { n: 'Tiara',               w: ['#ff6a88', '#8a2a4a'] },
+  dimas:  { n: 'Dimas',               w: ['#30b0c7', '#0a5a6a'] },
+  g_anatomi:  { n: 'Kelompok Anatomi 🩺',   w: ['#0a84ff', '#0a2a5a'], grup: true },
+  g_angkatan: { n: 'FK Angkatan 2024 🎓',   w: ['#5e5ce6', '#1a1a4a'], grup: true },
+  g_keluarga: { n: 'Keluarga Besar 🏠',     w: ['#ff9f0a', '#7a4a10'], grup: true },
+  bank:   { n: 'INFO-BANK',           w: ['#30d158', '#0a4a1a'], layanan: true, ikon: '🏦' },
+  kurir:  { n: 'Kurir Paket',         w: ['#ff9f0a', '#8a4a00'], layanan: true, ikon: '📦' },
+  spam:   { n: '+62 821-5550-1234',   w: ['#636366', '#2c2c2e'], layanan: true, ikon: '❓', spam: true }
+};
+
+// Percakapan. d = pengirim ('aku' = Jeno), t = isi, w = jam, h = hari
+// belum = jumlah pesan belum dibaca (badge biru). muted = true untuk grup yang disenyapkan.
+const T = {
+  hyuck: { belum: 0, pesan: [
+    { d: 'aku',   t: '...udah 2 jam nih di perpus', w: '15:40', h: 'Kamis' },
+    { d: 'aku',   t: 'Hyuck??', w: '16:55', h: 'Kamis' },
+    { d: 'hyuck', t: 'MAAF AKU LUPA HPNYA LOWBAT 😭', w: '17:30', h: 'Kamis' },
+    { d: 'hyuck', t: 'aku di lapangan, dosen ngajak survei dadakan', w: '17:30', h: 'Kamis' },
+    { d: 'aku',   t: 'tiga jam lho', w: '17:41', h: 'Kamis' },
+    { d: 'hyuck', t: 'aku traktir es krim, janji 🍦', w: '17:42', h: 'Kamis' },
+    { d: 'aku',   t: 'stroberi', w: '17:44', h: 'Kamis' },
+    { d: 'hyuck', t: 'siap dokter 💕', w: '17:44', h: 'Kamis' },
+    { d: 'hyuck', t: 'sayang, udah di mana?', w: '20:41', h: 'Today' },
+    { d: 'hyuck', t: 'kok belum bales dari tadi', w: '20:48', h: 'Today' },
+    { d: 'aku',   t: 'lagi di jalan pulang', w: '20:49', h: 'Today' }
+  ]},
+  mami: { belum: 2, pesan: [
+    { d: 'mami', t: 'Nak, jangan lupa makan', w: '19:02', h: 'Yesterday' },
+    { d: 'aku',  t: 'iya Mi, ini lagi di kos', w: '19:10', h: 'Yesterday' },
+    { d: 'mami', t: 'Besok telpon Mami ya', w: '19:11', h: 'Yesterday' },
+    { d: 'mami', t: 'Nak, udah makan?', w: '18:20', h: 'Today' },
+    { d: 'mami', t: 'Jangan lupa minum vitamin ya', w: '18:20', h: 'Today' }
+  ]},
+  karin: { belum: 2, pesan: [
+    { d: 'karin', t: 'jen catatan fisiologi hari ini kamu punya?', w: '20:11', h: 'Kamis' },
+    { d: 'aku',   t: 'punya, nanti aku fotoin', w: '20:15', h: 'Kamis' },
+    { d: 'karin', t: 'makasih bestiee 😭', w: '20:15', h: 'Kamis' },
+    { d: 'karin', t: 'btw yang suka jemput kamu pake motor itu siapa sih 👀', w: '16:28', h: 'Today' },
+    { d: 'karin', t: 'kemarin aku liat dia bawa es krim wkwkwk', w: '16:30', h: 'Today' }
+  ]},
+  g_anatomi: { belum: 3, grup: true, anggota: 'Rafi, Nadia, Bimo, Karin', pesan: [
+    { d: 'rafi',  t: 'guys praktikum senin jangan lupa jas lab ya', w: '20:30', h: 'Yesterday' },
+    { d: 'bimo',  t: 'siap', w: '20:32', h: 'Yesterday' },
+    { d: 'nadia', t: 'laporan udah sampai bab 3, siapa yang ngerjain pembahasan?', w: '20:40', h: 'Yesterday' },
+    { d: 'karin', t: 'jeno bagian pembahasan ya 🙏', w: '20:41', h: 'Yesterday' },
+    { d: 'aku',   t: 'oke, nanti aku kerjain', w: '20:45', h: 'Yesterday' },
+    { d: 'rafi',  t: 'JENO PENYELAMAT KELOMPOK 🙌', w: '16:58', h: 'Today' },
+    { d: 'nadia', t: 'kumpulin paling lambat minggu jam 8 malam ya', w: '17:02', h: 'Today' },
+    { d: 'bimo',  t: 'bab 4 udah aku upload di drive', w: '17:05', h: 'Today' }
+  ]},
+  g_angkatan: { belum: 6, muted: true, grup: true, anggota: 'Kak Salsa, Fajar, Tiara, Dimas, +120 lainnya', pesan: [
+    { d: 'salsa', t: 'INFO: Kuis fisiologi hari Kamis 29/10 jam 08.00, ruang B2. Bawa kartu ujian.', w: '15:10', h: 'Today' },
+    { d: 'fajar', t: 'ada yang punya slide kardiovaskular?', w: '15:14', h: 'Today' },
+    { d: 'tiara', t: 'ada di drive angkatan, folder Blok 5', w: '15:15', h: 'Today' },
+    { d: 'dimas', t: 'ada yang liat dompet biru di kantin?? 🥲', w: '15:30', h: 'Today' },
+    { d: 'karin', t: 'dimas dompet kamu di aku, tadi ketinggalan di meja', w: '15:31', h: 'Today' },
+    { d: 'dimas', t: 'KARIN SELAMAT NYAWAKU 😭', w: '15:32', h: 'Today' },
+    { d: 'salsa', t: 'Reminder: pengumpulan formulir praktikum paling lambat Jumat', w: '15:50', h: 'Today' }
+  ]},
+  g_keluarga: { belum: 0, grup: true, anggota: 'Mami, Kak Seulgi, Tante Ratna', pesan: [
+    { d: 'mami',   t: 'Minggu depan kumpul di rumah ya, semua harus pulang', w: '09:00', h: 'Kamis' },
+    { d: 'seulgi', t: 'siap Mi', w: '09:05', h: 'Kamis' },
+    { d: 'tante',  t: 'tante bawa kue ya', w: '09:20', h: 'Kamis' },
+    { d: 'aku',    t: 'siap Mi, aku pulang Sabtu', w: '10:11', h: 'Kamis' }
+  ]},
+  seulgi: { belum: 0, pesan: [
+    { d: 'seulgi', t: 'Dek, Mami nanyain terus kamu kapan pulang', w: '14:02', h: 'Yesterday' },
+    { d: 'aku',    t: 'hari Sabtu depan, Kak', w: '14:30', h: 'Yesterday' },
+    { d: 'seulgi', t: 'oke, aku bilangin. bawa oleh-oleh ya', w: '14:31', h: 'Yesterday' }
+  ]},
+  aryo: { belum: 1, pesan: [
+    { d: 'aryo', t: 'Selamat siang Jeno. Jadwal bimbingan dimajukan jadi Rabu jam 10.00 di ruang dosen.', w: '13:12', h: 'Today' }
+  ]},
+  kurir: { belum: 1, pesan: [
+    { d: 'kurir', t: 'Paket Anda sedang diantar kurir. Estimasi tiba hari ini sebelum 17.00.', w: '11:20', h: 'Today' }
+  ]},
+  bank: { belum: 1, pesan: [
+    { d: 'bank', t: 'Transaksi Rp18.500 di WARUNG KOPI JAM DUA berhasil.', w: '21:15', h: 'Yesterday' },
+    { d: 'bank', t: 'Kode OTP Anda: 482913. Jangan berikan kode ini kepada siapa pun, termasuk pihak bank.', w: '11:02', h: 'Today' }
+  ]},
+  spam: { belum: 1, pesan: [
+    { d: 'spam', t: 'Selamat! Nomor Anda terpilih sebagai pemenang undian 50 juta. Hubungi kami sekarang untuk klaim hadiah.', w: '10:05', h: 'Wednesday' }
+  ]}
+};
+
+// Yang disematkan di atas (bulat-bulat), dan urutan daftar di bawahnya
+let pinned = ['hyuck', 'mami', 'karin'];
+let urut = ['g_anatomi', 'g_angkatan', 'aryo', 'kurir', 'bank', 'seulgi', 'g_keluarga', 'spam'];
+
+// Pesan yang akan MASUK sendiri setelah halaman dibuka (jadi notifikasi). ms = berapa milidetik setelah dibuka.
+const NOTIF_JALAN = true;   // ganti false kalau tidak mau ada notifikasi
+const masuk = [
+  { ms: 6000,  th: 'hyuck',     d: 'hyuck', t: 'aku udah di depan kos lho 👀' },
+  { ms: 14000, th: 'g_anatomi', d: 'rafi',  t: 'jangan lupa bagian pembahasan ya Jen 😭' },
+  { ms: 23000, th: 'karin',     d: 'karin', t: 'JEN JAWAB DONG ITU SIAPA 😭' }
+];
+
+// Balasan otomatis kalau kamu ngetik dan kirim di percakapan tertentu
+const balasan = {
+  hyuck: ['hehe iya sayang 💕', 'jangan lama-lama, es krimnya meleleh 🍦', 'aku nunggu di depan ya'],
+  karin: ['jawab yang bener dongg', 'wkwkwk oke oke', 'aku ga nanya lagi (bohong)'],
+  mami:  ['Ya sudah, hati-hati ya Nak', 'Mami tunggu kabarnya ya']
+};
+
+// =====================================================================
+//  KODE
+// =====================================================================
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;');
+let aktif = null, idxBalas = {}, bantimer = null;
+
+function pasang(el, nama) {
+  const coba = [nama + '.jpg', nama + '.jpg.jpg'];
+  (function next(i) {
+    if (i >= coba.length) return;
+    const im = new Image();
+    im.onload = () => { el.style.backgroundImage = "url('" + coba[i] + "')"; el.innerHTML = ''; };
+    im.onerror = () => next(i + 1);
+    im.src = coba[i];
+  })(0);
+}
+function fotoAvatar() { document.querySelectorAll('[data-foto]').forEach(e => { if (e.dataset.foto) pasang(e, e.dataset.foto); }); }
+
+function av(k, s) {
+  const c = K[k];
+  const g = 'linear-gradient(135deg,' + c.w[0] + ',' + c.w[1] + ')';
+  const isi = c.ikon || (c.grup ? '👥' : (c.n.replace(/[^A-Za-z0-9]/g, '').charAt(0).toUpperCase() || '?'));
+  return '<div class="ava" data-foto="' + (c.foto || '') + '" style="width:' + s + 'em;height:' + s + 'em;background:' + g + '"><span style="font-size:' + (s * 0.42) + 'em">' + isi + '</span></div>';
+}
+
+function total() { return Object.values(T).reduce((a, t) => a + t.belum, 0); }
+function simpanTotal() { try { localStorage.setItem('pesanUnread', String(total())); } catch (e) {} }
+function terakhir(k) { const p = T[k].pesan; return p[p.length - 1]; }
+function waktuTampil(m) { return m.h === 'Today' ? m.w : m.h; }
+function preview(k) {
+  const m = terakhir(k);
+  if (T[k].grup && m.d !== 'aku') return K[m.d].n.split(' ')[0] + ': ' + m.t;
+  return m.t;
+}
+
+// ---------- BERANDA ----------
+function renderInbox() {
+  const q = $('q').value.trim().toLowerCase();
+  $('pinned').innerHTML = q ? '' : pinned.map(k =>
+    '<div class="pn" data-th="' + k + '">' + av(k, 4.6) + (T[k].belum ? '<i class="dot">' + T[k].belum + '</i>' : '') + '<b>' + esc(K[k].n) + '</b></div>'
+  ).join('');
+  const keys = (q ? pinned.concat(urut) : urut).filter(k => !q || (K[k].n + ' ' + preview(k)).toLowerCase().includes(q));
+  $('lst').innerHTML = keys.map(k => {
+    const m = terakhir(k), t = T[k];
+    return '<div class="cv" data-th="' + k + '">' + av(k, 3.3) +
+      '<div class="tx"><div class="r1"><b>' + esc(K[k].n) + (t.muted ? ' 🔕' : '') + '</b><span class="w">' + esc(waktuTampil(m)) + '</span></div>' +
+      '<div class="r2"><span class="pv">' + esc(preview(k)) + '</span>' + (t.belum ? '<i class="bd' + (t.muted ? ' mt' : '') + '">' + t.belum + '</i>' : '') + '</div></div></div>';
+  }).join('');
+  fotoAvatar();
+}
+
+// ---------- PERCAKAPAN ----------
+function renderThread() {
+  const t = T[aktif], c = K[aktif];
+  const sisa = total() - t.belum;
+  $('hd').innerHTML =
+    '<div class="bk" id="bk"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg>' + (sisa ? '<span>' + sisa + '</span>' : '') + '</div>' +
+    (c.layanan ? '' : '<div class="ik2"><svg viewBox="0 0 24 24"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1l-2.3 2.2z"/></svg><svg viewBox="0 0 24 24"><rect x="2" y="6" width="13" height="12" rx="3"/><path d="M15 10l7-3v10l-7-3z"/></svg></div>') +
+    av(aktif, 3.4) + '<b>' + esc(c.n) + (c.layanan ? '' : ' ›') + '</b>' + (t.grup ? '<small>' + esc(t.anggota) + '</small>' : '');
+
+  let h = '', prevH = null, prevD = null;
+  t.pesan.forEach(m => {
+    if (m.h !== prevH) { h += '<div class="sep"><b>' + esc(m.h) + '</b> ' + esc(m.w) + '</div>'; prevH = m.h; prevD = null; }
+    const out = m.d === 'aku';
+    if (t.grup && !out && m.d !== prevD) h += '<div class="sn" style="color:' + K[m.d].w[0] + '">' + esc(K[m.d].n) + '</div>';
+    h += '<div class="m ' + (out ? 'out' : 'in') + '">' + esc(m.t) + '</div>';
+    prevD = m.d;
+  });
+  if (terakhir(aktif).d === 'aku') h += '<div class="dlv">Delivered</div>';
+  $('ms').innerHTML = h;
+  $('ms').scrollTop = $('ms').scrollHeight;
+
+  $('inpBar').style.display = (c.layanan ? 'none' : 'flex');
+  $('rep').style.display = (c.spam ? 'block' : 'none');
+  fotoAvatar();
+}
+
+function buka(k) {
+  aktif = k;
+  T[k].belum = 0;
+  simpanTotal();
+  renderThread();
+  $('inbox').classList.remove('on'); $('thread').classList.add('on');
+  $('ban').classList.remove('on');
+}
+function tutup() {
+  aktif = null;
+  $('thread').classList.remove('on'); $('inbox').classList.add('on');
+  renderInbox();
+}
+
+// ---------- PESAN MASUK + NOTIFIKASI ----------
+function banner(th, dari, teks) {
+  const pengirim = (T[th].grup && dari !== 'aku') ? K[dari].n + ' · ' + K[th].n : K[th].n;
+  const ban = $('ban');
+  ban.innerHTML = '<div class="bi"><svg viewBox="0 0 24 24"><path d="M12 4C6.5 4 2.5 7.4 2.5 11.6c0 2.4 1.3 4.5 3.4 5.9-.3 1.3-1 2.4-1.9 3.3 1.8-.1 3.4-.8 4.7-1.8.9.2 1.8.3 2.8.3 5.5 0 9.5-3.4 9.5-7.7S17.5 4 12 4z"/></svg></div>' +
+    '<div class="bb"><b>' + esc(pengirim) + '</b><span>' + esc(teks) + '</span></div><small>now</small>';
+  ban.dataset.th = th;
+  ban.classList.add('on');
+  clearTimeout(bantimer);
+  bantimer = setTimeout(() => ban.classList.remove('on'), 4800);
+}
+
+function pesanMasuk(th, dari, teks) {
+  T[th].pesan.push({ d: dari, t: teks, w: '21:07', h: 'Today' });
+  const terbuka = (aktif === th);
+  if (terbuka) { renderThread(); }
+  else {
+    T[th].belum++;
+    if (!T[th].muted) banner(th, dari, teks);
+  }
+  if (urut.includes(th)) { urut = [th].concat(urut.filter(x => x !== th)); }
+  simpanTotal();
+  if (!aktif) renderInbox();
+}
+
+$('ban').onclick = () => { const th = $('ban').dataset.th; if (th) buka(th); };
+
+// ---------- KIRIM ----------
+function kirim() {
+  const v = $('inp').value.trim();
+  if (!v || !aktif) return;
+  const th = aktif;
+  T[th].pesan.push({ d: 'aku', t: v, w: '21:07', h: 'Today' });
+  $('inp').value = ''; $('kirim').classList.remove('on');
+  renderThread();
+  const b = balasan[th];
+  if (b) {
+    idxBalas[th] = (idxBalas[th] || 0);
+    const teks = b[idxBalas[th] % b.length]; idxBalas[th]++;
+    setTimeout(() => pesanMasuk(th, th, teks), 1800);
+  }
+}
+$('inp').addEventListener('input', () => $('kirim').classList.toggle('on', $('inp').value.trim().length > 0));
+$('inp').addEventListener('keydown', e => { if (e.key === 'Enter') kirim(); });
+$('kirim').onclick = kirim;
+
+// ---------- EVENT ----------
+document.addEventListener('click', e => {
+  const th = e.target.closest('[data-th]');
+  if (th && $('inbox').classList.contains('on')) { buka(th.dataset.th); return; }
+  if (e.target.closest('#bk')) tutup();
+});
+$('q').oninput = renderInbox;
+
+// ---------- JALAN ----------
+simpanTotal();
+renderInbox();
+if (NOTIF_JALAN) masuk.forEach(p => setTimeout(() => pesanMasuk(p.th, p.d, p.t), p.ms));
+</script>
+</body>
+</html>

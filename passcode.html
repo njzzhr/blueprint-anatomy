@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<title>Passcode</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;height:100vh;display:flex;justify-content:center;align-items:center;background:#0b0b0f;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}
+.hp{position:relative;height:92vh;aspect-ratio:390/844;font-size:1.7vh;border:.8vh solid #222;border-radius:6vh;overflow:hidden;color:#fff;background:#111}
+.bg{position:absolute;inset:-2em;background:#111 center/cover;filter:blur(1.1em) brightness(.55)}
+.pulau{position:absolute;top:1.4vh;left:50%;transform:translateX(-50%);width:13vh;height:4vh;background:#000;border-radius:3vh;z-index:6}
+.status{position:absolute;top:1.4vh;left:0;right:0;height:4vh;display:flex;justify-content:space-between;align-items:center;padding:0 2.4em;font-weight:600;z-index:5}
+.status .r{display:flex;align-items:center;gap:.4em}
+.status svg{fill:#fff;height:.8em;width:auto}
+.bt{width:1.9em;height:.95em;border:1px solid rgba(255,255,255,.55);border-radius:.3em;position:relative}
+.bt::before{content:"";position:absolute;left:1px;top:1px;bottom:1px;width:75%;background:#fff;border-radius:.15em}
+
+.isi{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;padding-top:8.2em}
+.judul{font-size:1.25em;font-weight:500;margin-bottom:1.2em}
+.dots{display:flex;gap:1.1em;height:1em;margin-bottom:3.2em}
+.dots i{width:1em;height:1em;border-radius:50%;border:1.5px solid #fff;display:block;transition:background .1s}
+.dots i.on{background:#fff}
+.dots.salah{animation:geser .4s}
+@keyframes geser{0%,100%{transform:translateX(0)}20%{transform:translateX(-.9em)}40%{transform:translateX(.9em)}60%{transform:translateX(-.6em)}80%{transform:translateX(.6em)}}
+.pad{display:grid;grid-template-columns:repeat(3,4.9em);gap:1.1em 1.5em}
+.k{width:4.9em;height:4.9em;border-radius:50%;background:rgba(255,255,255,.2);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;user-select:none;transition:background .15s}
+.k:active{background:rgba(255,255,255,.5)}
+.k b{font-size:1.9em;font-weight:300;line-height:1}
+.k small{font-size:.5em;letter-spacing:.15em;height:1em;margin-top:.1em;font-weight:600}
+.k.kosong{background:none;pointer-events:none}
+.bawah{position:absolute;left:0;right:0;bottom:3.6em;display:flex;justify-content:space-between;padding:0 3.2em}
+.bawah span{cursor:pointer;font-size:1em}
+.bar{position:absolute;bottom:.6em;left:50%;transform:translateX(-50%);width:10em;height:.35em;border-radius:1em;background:#fff}
+</style>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><link rel="stylesheet" href="mobile.css"></head>
+<body>
+<div class="hp">
+  <div class="bg" id="bg"></div>
+  <div class="pulau"></div>
+
+  <div class="status">
+    <span>21:06</span>
+    <div class="r">
+      <svg viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx=".7"/><rect x="5" y="5.5" width="3" height="6.5" rx=".7"/><rect x="10" y="3" width="3" height="9" rx=".7"/><rect x="15" y="0" width="3" height="12" rx=".7"/></svg>
+      <svg viewBox="0 0 16 12"><path d="M8 2.4c2.2 0 4.2.9 5.7 2.3l1-1.1C12.9 1.9 10.6.9 8 .9S3.1 1.9 1.3 3.6l1 1.1C3.8 3.3 5.8 2.4 8 2.4zm0 3.6c1.2 0 2.3.5 3.2 1.2l1-1.1C11 5 9.6 4.4 8 4.4S5 5 3.8 6.1l1 1.1C5.7 6.5 6.8 6 8 6zm0 3.4L6.3 7.6c.5-.5 1.1-.7 1.7-.7s1.2.2 1.7.7L8 9.4z"/></svg>
+      <div class="bt"></div>
+    </div>
+  </div>
+
+  <div class="isi">
+    <div class="judul">Enter Passcode</div>
+    <div class="dots" id="dots"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    <div class="pad" id="pad"></div>
+  </div>
+
+  <div class="bawah">
+    <span>Emergency</span>
+    <span id="kanan">Cancel</span>
+  </div>
+
+  <div class="bar"></div>
+</div>
+
+<script>
+// ====== GANTI DI SINI ======
+const KODE = '230400';   // passcode yang benar (harus 6 angka)
+const TUJUAN = 'home.html';   // halaman setelah passcode benar
+
+// Wallpaper (nama file foto tanpa .jpg)
+function pasang(el, nama) {
+  const coba = [nama + '.jpg', nama + '.jpg.jpg'];
+  (function next(i) {
+    if (i >= coba.length) return;
+    const im = new Image();
+    im.onload = () => { el.style.backgroundImage = "url('" + coba[i] + "')"; };
+    im.onerror = () => next(i + 1);
+    im.src = coba[i];
+  })(0);
+}
+pasang(document.getElementById('bg'), 'foto');
+
+// ====== KODE ======
+const huruf = {2:'ABC',3:'DEF',4:'GHI',5:'JKL',6:'MNO',7:'PQRS',8:'TUV',9:'WXYZ'};
+const pad = document.getElementById('pad');
+['1','2','3','4','5','6','7','8','9','','0',''].forEach(n => {
+  const k = document.createElement('div');
+  k.className = 'k' + (n === '' ? ' kosong' : '');
+  if (n !== '') {
+    k.innerHTML = '<b>' + n + '</b><small>' + (huruf[n] || '') + '</small>';
+    k.onclick = () => tekan(n);
+  }
+  pad.appendChild(k);
+});
+
+const dotsEl = document.getElementById('dots');
+const dots = dotsEl.querySelectorAll('i');
+const kanan = document.getElementById('kanan');
+let isi = '';
+
+function render() {
+  dots.forEach((d, i) => d.classList.toggle('on', i < isi.length));
+  kanan.textContent = isi.length ? 'Delete' : 'Cancel';
+}
+function tekan(n) {
+  if (isi.length >= 6) return;
+  isi += n;
+  render();
+  if (isi.length === 6) setTimeout(cek, 150);
+}
+function cek() {
+  if (isi === KODE) {
+    location.href = TUJUAN;
+  } else {
+    dotsEl.classList.add('salah');
+    setTimeout(() => { dotsEl.classList.remove('salah'); isi = ''; render(); }, 450);
+  }
+}
+kanan.onclick = () => {
+  if (isi.length) { isi = isi.slice(0, -1); render(); }
+  else location.href = 'halo.html';
+};
+document.addEventListener('keydown', e => {
+  if (/^[0-9]$/.test(e.key)) tekan(e.key);
+  else if (e.key === 'Backspace') { isi = isi.slice(0, -1); render(); }
+});
+</script>
+</body>
+</html>

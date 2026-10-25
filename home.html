@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<title>Home</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;height:100vh;display:flex;justify-content:center;align-items:center;background:#0b0b0f;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}
+.hp{position:relative;height:92vh;aspect-ratio:390/844;font-size:1.7vh;border:.8vh solid #222;border-radius:6vh;overflow:hidden;color:#fff;background:linear-gradient(rgba(0,0,0,.2),rgba(0,0,0,.2)),url('foto.jpg.jpg') center/cover}
+.pulau{position:absolute;top:1.4vh;left:50%;transform:translateX(-50%);width:13vh;height:4vh;background:#000;border-radius:3vh;z-index:6}
+.status{position:absolute;top:1.4vh;left:0;right:0;height:4vh;display:flex;justify-content:space-between;align-items:center;padding:0 2.4em;font-weight:600;z-index:5}
+.status .r{display:flex;align-items:center;gap:.4em}
+.status svg{fill:#fff;height:.8em;width:auto}
+.bt{width:1.9em;height:.95em;border:1px solid rgba(255,255,255,.55);border-radius:.3em;position:relative}
+.bt::before{content:"";position:absolute;left:1px;top:1px;bottom:1px;width:75%;background:#fff;border-radius:.15em}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);row-gap:1.9em;padding:1.5em 1.2em 0}
+.wid{padding:5.2em 1.2em 0}
+.wr{display:grid;grid-template-columns:1fr 1fr;gap:.9em;margin-bottom:.9em}
+.w{border-radius:1.6em;padding:.9em;position:relative;overflow:hidden;box-shadow:0 .2em .8em rgba(0,0,0,.25);height:9.6em}
+.w.klik{cursor:pointer}
+.w.cuaca{background:linear-gradient(160deg,#6c8fb8,#3b567a);display:flex;flex-direction:column;justify-content:space-between}
+.w.cuaca .l{font-size:.85em;font-weight:600}
+.w.cuaca .d{font-size:3.1em;font-weight:300;line-height:1.05}
+.w.cuaca .k{font-size:.8em;line-height:1.35}
+.w.kal{background:rgba(28,28,30,.88);backdrop-filter:blur(1.2em);-webkit-backdrop-filter:blur(1.2em)}
+.w.kal .h{color:#ff453a;font-size:.8em;font-weight:700}
+.w.kal .t{font-size:2.6em;font-weight:300;line-height:1;margin:.05em 0 .3em}
+.w.kal .e{font-size:.78em;line-height:1.3;border-left:.25em solid #ff453a;padding-left:.5em;margin-top:.3em}
+.w.kal .e small{display:block;color:#aaa}
+.w.med{background:#333 center/cover;display:flex;flex-direction:column;justify-content:flex-end;color:#fff;margin-bottom:0}
+.w.med::before{content:"";position:absolute;inset:0;background:linear-gradient(transparent 25%,rgba(0,0,0,.7))}
+.w.med>*{position:relative}
+.w.med .b{font-size:2.3em;font-weight:600;line-height:1}
+.w.med .b small{font-size:.4em;font-weight:500;margin-left:.3em}
+.w.med .s{font-size:.85em;margin-top:.3em}
+.app{text-align:center;cursor:pointer;text-shadow:0 1px 3px rgba(0,0,0,.5)}
+.app span{display:block;font-size:.78em;margin-top:.5em}
+.ik{width:4.3em;height:4.3em;border-radius:1.05em;margin:0 auto;display:grid;place-items:center;overflow:hidden;box-shadow:0 .2em .6em rgba(0,0,0,.25);transition:transform .1s}
+.app:active .ik{transform:scale(.92)}
+.ik svg{width:2.5em;height:2.5em}
+.ik svg.f{width:100%;height:100%}
+.dots{position:absolute;bottom:8.8em;left:0;right:0;display:flex;justify-content:center;gap:.6em}
+.dots i{width:.55em;height:.55em;border-radius:50%;background:rgba(255,255,255,.45)}
+.dots i:first-child{background:#fff}
+.dock .app{position:relative}
+.bdg{position:absolute;top:-.7em;left:calc(50% + .9em);min-width:1.9em;height:1.9em;padding:0 .45em;border-radius:1em;background:#ff3b30;font-size:.78em;font-weight:600;display:grid;place-items:center;z-index:5;box-shadow:0 .1em .3em rgba(0,0,0,.4)}
+.dock{position:absolute;left:.9em;right:.9em;bottom:1.9em;height:5.7em;padding:0 .8em;display:flex;justify-content:space-around;align-items:center;background:rgba(255,255,255,.22);backdrop-filter:blur(1.4em);-webkit-backdrop-filter:blur(1.4em);border-radius:2em}
+.bar{position:absolute;bottom:.6em;left:50%;transform:translateX(-50%);width:10em;height:.35em;border-radius:1em;background:#fff}
+</style>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><link rel="stylesheet" href="mobile.css"></head>
+<body>
+<div class="hp">
+  <div class="pulau"></div>
+
+  <div class="status">
+    <span>21:06</span>
+    <div class="r">
+      <svg viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx=".7"/><rect x="5" y="5.5" width="3" height="6.5" rx=".7"/><rect x="10" y="3" width="3" height="9" rx=".7"/><rect x="15" y="0" width="3" height="12" rx=".7"/></svg>
+      <svg viewBox="0 0 16 12"><path d="M8 2.4c2.2 0 4.2.9 5.7 2.3l1-1.1C12.9 1.9 10.6.9 8 .9S3.1 1.9 1.3 3.6l1 1.1C3.8 3.3 5.8 2.4 8 2.4zm0 3.6c1.2 0 2.3.5 3.2 1.2l1-1.1C11 5 9.6 4.4 8 4.4S5 5 3.8 6.1l1 1.1C5.7 6.5 6.8 6 8 6zm0 3.4L6.3 7.6c.5-.5 1.1-.7 1.7-.7s1.2.2 1.7.7L8 9.4z"/></svg>
+      <div class="bt"></div>
+    </div>
+  </div>
+
+  <!-- ===== WIDGET ===== -->
+  <div class="wid">
+    <div class="wr">
+      <!-- Cuaca -->
+      <div class="w cuaca">
+        <div>
+          <div class="l">Kos Jeno ➤</div>
+          <div class="d">24°</div>
+        </div>
+        <div class="k">☁️ Berawan<br>H:27° L:21°</div>
+      </div>
+      <!-- Kalender (klik -> kalender.html) -->
+      <div class="w kal klik" onclick="location.href='kalender.html'">
+        <div class="h">SABTU</div>
+        <div class="t">24</div>
+        <div class="e">Makan es krim sama Hyuck 💕<small>20:00</small></div>
+      </div>
+    </div>
+    <!-- Hitung mundur kuis (klik -> kalender) -->
+    <div class="w med klik" id="wMed" onclick="location.href='kalender.html'">
+      <div class="b">5<small>hari lagi</small></div>
+      <div class="s">Kuis fisiologi 📝 · Kamis, 29 Oktober</div>
+    </div>
+  </div>
+
+  <div class="grid">
+    <!-- Calendar (klik -> kalender.html) -->
+    <div class="app" onclick="location.href='kalender.html'">
+      <div class="ik" style="background:#fff;color:#000;display:flex;flex-direction:column;justify-content:center;align-items:center">
+        <small style="color:#ff3b30;font-size:.62em;font-weight:600;line-height:1">SAB</small>
+        <b style="font-size:1.9em;font-weight:300;line-height:1.1">24</b>
+      </div>
+      <span>Calendar</span>
+    </div>
+
+    <!-- Photos (klik -> galeri) -->
+    <div class="app" onclick="location.href='galeri.html'">
+      <div class="ik" style="background:linear-gradient(135deg,#ffcf5a,#ff5f7e)">
+        <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="3" fill="none" stroke="#fff" stroke-width="1.8"/><circle cx="9" cy="9.5" r="1.7" fill="#fff"/><path d="M4 18l5-5 4 4 3-3 4 4" fill="none" stroke="#fff" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/></svg>
+      </div>
+      <span>Photos</span>
+    </div>
+
+    <!-- Camera -->
+    <div class="app">
+      <div class="ik" style="background:linear-gradient(#8e8e93,#48484a)">
+        <svg viewBox="0 0 24 24"><path fill="#fff" fill-rule="evenodd" d="M9 4L7.6 6H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-2.6L15 4H9zm3 5a4 4 0 1 1 0 8 4 4 0 0 1 0-8z"/></svg>
+      </div>
+      <span>Camera</span>
+    </div>
+
+    <!-- Maps (klik -> peta.html) -->
+    <div class="app" onclick="location.href='peta.html'">
+      <div class="ik" style="background:linear-gradient(#7ee08a,#2fb6ff)">
+        <svg viewBox="0 0 24 24"><path fill="#fff" d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg>
+      </div>
+      <span>Maps</span>
+    </div>
+
+    <!-- Notes (klik -> catatan.html) -->
+    <div class="app" onclick="location.href='catatan.html'">
+      <div class="ik" style="background:#fff">
+        <svg class="f" viewBox="0 0 24 24" preserveAspectRatio="none"><rect width="24" height="7" fill="#ffd60a"/><path d="M5 12h14M5 16h14M5 20h9" stroke="#c7c7cc" stroke-width="1.4" stroke-linecap="round"/></svg>
+      </div>
+      <span>Notes</span>
+    </div>
+
+    <!-- Instagram (klik -> instagram.html) -->
+    <div class="app" onclick="location.href='instagram.html'">
+      <div class="ik" style="background:linear-gradient(135deg,#ff9a5a,#e0348a,#7b3fe4)">
+        <svg viewBox="0 0 24 24"><path fill="#fff" d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>
+      </div>
+      <span>Instagram</span>
+    </div>
+
+    <!-- Settings (klik -> pengaturan.html) -->
+    <div class="app" onclick="location.href='pengaturan.html'">
+      <div class="ik" style="background:linear-gradient(#a1a1a6,#636366)">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4" fill="none" stroke="#fff" stroke-width="2"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1" stroke="#fff" stroke-width="2.6" stroke-linecap="round"/></svg>
+      </div>
+      <span>Settings</span>
+    </div>
+  </div>
+
+  <div class="dots"><i></i><i></i><i></i></div>
+
+  <div class="dock">
+    <!-- Phone (klik -> telepon.html) -->
+    <div class="app" onclick="location.href='telepon.html'">
+      <div class="ik" style="background:linear-gradient(#67f27f,#17c33a)">
+        <svg viewBox="0 0 24 24"><path fill="#fff" d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1l-2.3 2.2z"/></svg>
+      </div>
+    </div>
+    <!-- Safari (klik -> safari.html) -->
+    <div class="app" onclick="location.href='safari.html'">
+      <div class="ik" style="background:linear-gradient(#5ac8fa,#0a84ff)">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="#fff" stroke-width="1.8"/><path d="M15.5 8.5l-2 5-5 2 2-5z" fill="#fff"/></svg>
+      </div>
+    </div>
+    <!-- Messages (klik -> pesan.html) -->
+    <div class="app" onclick="location.href='pesan.html'">
+      <div class="bdg" id="bdgPesan">17</div>
+      <div class="ik" style="background:linear-gradient(#67f27f,#17c33a)">
+        <svg viewBox="0 0 24 24"><path fill="#fff" d="M12 4C6.5 4 2.5 7.4 2.5 11.6c0 2.4 1.3 4.5 3.4 5.9-.3 1.3-1 2.4-1.9 3.3 1.8-.1 3.4-.8 4.7-1.8.9.2 1.8.3 2.8.3 5.5 0 9.5-3.4 9.5-7.7S17.5 4 12 4z"/></svg>
+      </div>
+    </div>
+    <!-- Music (klik -> musik.html) -->
+    <div class="app" onclick="location.href='musik.html'">
+      <div class="ik" style="background:linear-gradient(#ff6a88,#fa233b)">
+        <svg viewBox="0 0 24 24"><path d="M9 17V6l10-2v11" fill="none" stroke="#fff" stroke-width="1.8" stroke-linejoin="round"/><circle cx="7" cy="17" r="2.5" fill="#fff"/><circle cx="17" cy="15" r="2.5" fill="#fff"/></svg>
+      </div>
+    </div>
+  </div>
+
+  <div class="bar"></div>
+</div>
+
+<script>
+// Foto latar widget kuis (nama file tanpa .jpg). Ganti 'sorotancampus' kalau mau foto lain.
+(function () {
+  const el = document.getElementById('wMed');
+  const coba = ['sorotancampus.jpg', 'sorotancampus.jpg.jpg'];
+  (function next(i) {
+    if (i >= coba.length) return;
+    const im = new Image();
+    im.onload = () => { el.style.backgroundImage = "url('" + coba[i] + "')"; };
+    im.onerror = () => next(i + 1);
+    im.src = coba[i];
+  })(0);
+})();
+
+// Angka merah di ikon Messages: dibaca dari pesan.html (kalau browser menyimpannya), kalau tidak pakai angka bawaan.
+(function () {
+  const b = document.getElementById('bdgPesan');
+  try {
+    const n = localStorage.getItem('pesanUnread');
+    if (n !== null) { if (Number(n) > 0) b.textContent = n; else b.style.display = 'none'; }
+  } catch (e) {}
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<title>Maps</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;height:100vh;display:flex;justify-content:center;align-items:center;background:#0b0b0f;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}
+.hp{position:relative;height:92vh;aspect-ratio:390/844;font-size:1.7vh;border:.8vh solid #222;border-radius:6vh;overflow:hidden;color:#fff;background:#1b1b1e}
+.pulau{position:absolute;top:1.4vh;left:50%;transform:translateX(-50%);width:13vh;height:4vh;background:#000;border-radius:3vh;z-index:30}
+.status{position:absolute;top:1.4vh;left:0;right:0;height:4vh;display:flex;justify-content:space-between;align-items:center;padding:0 2.4em;font-weight:600;z-index:29}
+.status .r{display:flex;align-items:center;gap:.4em}
+.status svg{fill:#fff;height:.8em;width:auto}
+.bt{width:1.9em;height:.95em;border:1px solid rgba(255,255,255,.55);border-radius:.3em;position:relative}
+.bt::before{content:"";position:absolute;left:1px;top:1px;bottom:1px;width:75%;background:#fff;border-radius:.15em}
+
+#peta{position:absolute;inset:0;width:100%;height:100%}
+.ctl{position:absolute;top:6.4em;right:1em;display:flex;flex-direction:column;gap:.6em;z-index:5}
+.ctl div{width:2.8em;height:2.8em;border-radius:.8em;background:rgba(40,40,44,.92);display:grid;place-items:center}
+.ctl svg{width:1.5em;height:1.5em;fill:none;stroke:#fff;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+
+.sheet{position:absolute;left:0;right:0;bottom:0;height:47%;background:#1c1c1e;border-radius:1.6em 1.6em 0 0;z-index:10;display:flex;flex-direction:column;box-shadow:0 -.4em 1.4em rgba(0,0,0,.45)}
+.grab{width:3.2em;height:.35em;border-radius:1em;background:#48484a;margin:.6em auto .5em;flex:none}
+.sc{flex:1;min-height:0;overflow-y:auto;scrollbar-width:none;padding:0 1.1em 3.4em}
+.sc::-webkit-scrollbar{display:none}
+.cari{display:flex;align-items:center;gap:.5em;background:#2c2c2e;border-radius:.8em;padding:.6em .8em;margin-bottom:.9em}
+.cari input{flex:1;background:none;border:0;outline:0;color:#fff;font-size:.95em;font-family:inherit}
+.cari input::placeholder{color:#8e8e93}
+.pil{display:flex;gap:.6em;margin-bottom:.8em}
+.pil div{flex:1;background:#2c2c2e;border-radius:.9em;padding:.6em .5em;text-align:center;cursor:pointer}
+.pil .ic{font-size:1.3em;display:block;margin-bottom:.1em}
+.pil b{display:block;font-size:.85em;font-weight:600}
+.pil small{display:block;font-size:.7em;color:#8e8e93}
+.jdl{font-weight:700;font-size:1.05em;margin:.4em 0 .5em}
+.rec{background:#2c2c2e;border-radius:.9em;overflow:hidden}
+.it{display:flex;align-items:center;gap:.8em;padding:.6em .8em;cursor:pointer;position:relative}
+.it + .it::before{content:"";position:absolute;top:0;left:3.6em;right:0;height:1px;background:#3a3a3c}
+.it .lg{flex:none;width:2.2em;height:2.2em;border-radius:50%;display:grid;place-items:center;font-size:1em}
+.it .tt b{display:block;font-size:.95em;font-weight:500}
+.it .tt small{display:block;font-size:.78em;color:#8e8e93;margin-top:.1em}
+.dh{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:.4em}
+.dh b{font-size:1.45em;font-weight:700;display:block}
+.dh small{color:#8e8e93;font-size:.85em}
+.x{width:2em;height:2em;border-radius:50%;background:#3a3a3c;display:grid;place-items:center;cursor:pointer;flex:none;font-size:.9em}
+.inf{font-size:.95em;margin:.5em 0 .9em;color:#fff}
+.inf small{color:#8e8e93}
+.bt2{display:flex;gap:.6em;margin-bottom:.9em}
+.bt2 div{flex:1;text-align:center;padding:.75em 0;border-radius:.9em;font-weight:600;cursor:pointer;font-size:.95em}
+.biru{background:#0a84ff}
+.merah{background:#ff453a}
+.abu{background:#2c2c2e;color:#0a84ff}
+.alm{background:#2c2c2e;border-radius:.9em;padding:.7em .9em;font-size:.88em;line-height:1.45}
+.alm small{display:block;color:#8e8e93;font-size:.8em;margin-bottom:.2em}
+.home{position:absolute;bottom:0;left:0;right:0;height:2.2em;display:flex;justify-content:center;align-items:flex-end;padding-bottom:.6em;cursor:pointer;z-index:40}
+.home i{width:10em;height:.35em;border-radius:1em;background:#fff;display:block}
+</style>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><link rel="stylesheet" href="mobile.css"></head>
+<body>
+<div class="hp">
+  <div class="pulau"></div>
+
+  <div class="status">
+    <span>21:06</span>
+    <div class="r">
+      <svg viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx=".7"/><rect x="5" y="5.5" width="3" height="6.5" rx=".7"/><rect x="10" y="3" width="3" height="9" rx=".7"/><rect x="15" y="0" width="3" height="12" rx=".7"/></svg>
+      <svg viewBox="0 0 16 12"><path d="M8 2.4c2.2 0 4.2.9 5.7 2.3l1-1.1C12.9 1.9 10.6.9 8 .9S3.1 1.9 1.3 3.6l1 1.1C3.8 3.3 5.8 2.4 8 2.4zm0 3.6c1.2 0 2.3.5 3.2 1.2l1-1.1C11 5 9.6 4.4 8 4.4S5 5 3.8 6.1l1 1.1C5.7 6.5 6.8 6 8 6zm0 3.4L6.3 7.6c.5-.5 1.1-.7 1.7-.7s1.2.2 1.7.7L8 9.4z"/></svg>
+      <div class="bt"></div>
+    </div>
+  </div>
+
+  <svg id="peta" viewBox="0 0 390 844" preserveAspectRatio="xMidYMid slice"></svg>
+
+  <div class="ctl">
+    <div><svg viewBox="0 0 24 24"><path d="M12 3l9 5-9 5-9-5z"/><path d="M3 13l9 5 9-5"/></svg></div>
+    <div><svg viewBox="0 0 24 24"><path d="M21 3L3 10.5l7.5 3L13.5 21z"/></svg></div>
+  </div>
+
+  <div class="sheet">
+    <div class="grab"></div>
+
+    <!-- Daftar -->
+    <div class="sc" id="daftar">
+      <div class="cari">🔍<input id="q" type="text" placeholder="Search Maps"></div>
+      <div class="pil">
+        <div id="pHome"><span class="ic">🏠</span><b>Home</b><small>Kos Jeno</small></div>
+        <div id="pWork"><span class="ic">🎓</span><b>Work</b><small>Kampus</small></div>
+        <div><span class="ic">＋</span><b>Add</b><small>&nbsp;</small></div>
+      </div>
+      <div class="jdl">Recents</div>
+      <div class="rec" id="rec"></div>
+    </div>
+
+    <!-- Detail -->
+    <div class="sc" id="detail" style="display:none">
+      <div class="dh">
+        <div><b id="dn"></b><small id="ds"></small></div>
+        <div class="x" id="tutup">✕</div>
+      </div>
+      <div class="inf" id="di"></div>
+      <div class="bt2" id="tombol">
+        <div class="biru" id="arah">Directions</div>
+        <div class="abu">Call</div>
+      </div>
+      <div class="alm"><small>Address</small><span id="da"></span></div>
+    </div>
+  </div>
+
+  <div class="home" onclick="location.href='home.html'"><i></i></div>
+</div>
+
+<script>
+// ====== GANTI / TAMBAH TEMPAT DI SINI ======
+// x, y = posisi pin di peta (peta lebarnya 390, tingginya 844; pin sebaiknya y antara 100 dan 420)
+// rute = titik-titik jalan dari Kos Jeno ke tempat itu (ikuti jalan: x = 90, 200, 310 dan y = 180, 300, 420)
+const tempat = [
+  { id: 'kampus', nama: 'Kampus', sub: 'Universitas Neo', alamat: 'Jl. Kampus Raya No. 1',
+    jarak: '1,2 km', waktu: '6 menit', ikon: '🎓', warna: '#ff9f0a', x: 200, y: 130,
+    rute: [[90,360],[90,300],[200,300],[200,180],[200,132]] },
+  { id: 'hyuck', nama: 'Kost Hyuck 💕', sub: 'Kost Putra Mawar', alamat: 'Jl. Mawar No. 7',
+    jarak: '2,4 km', waktu: '11 menit', ikon: '💕', warna: '#ff375f', x: 310, y: 360,
+    rute: [[90,360],[90,420],[310,420],[310,362]] },
+  { id: 'es', nama: 'Toko Es Krim', sub: 'Kedai es krim', alamat: 'Jl. Mawar No. 2',
+    jarak: '1,8 km', waktu: '8 menit', ikon: '🍦', warna: '#bf5af2', x: 310, y: 300,
+    rute: [[90,360],[90,300],[310,300]] },
+  { id: 'jeno', nama: 'My Kost', sub: 'Home', alamat: 'Jl. Melati No. 12',
+    jarak: '', waktu: '', ikon: '🏠', warna: '#0a84ff', x: 90, y: 360, rute: null }
+];
+
+// ====== PETA ======
+const svg = document.getElementById('peta');
+const XS = [-10, 90, 200, 310, 420], YS = [60, 180, 300, 420, 540, 660, 780, 900];
+let dipilih = null, ruteId = null;
+
+function gambar() {
+  let s = '<rect width="390" height="844" fill="#1b1b1e"/>';
+  for (let i = 0; i < XS.length - 1; i++) for (let j = 0; j < YS.length - 1; j++) {
+    const x1 = XS[i], x2 = XS[i+1], y1 = YS[j], y2 = YS[j+1];
+    if (y1 === 60 && (x1 === 90 || x1 === 200)) continue;
+    if (x1 === 200 && y1 === 300) continue;
+    s += '<rect x="' + (x1+12) + '" y="' + (y1+12) + '" width="' + (x2-x1-24) + '" height="' + (y2-y1-24) + '" rx="6" fill="#242428"/>';
+  }
+  s += '<rect x="102" y="72" width="196" height="96" rx="8" fill="#26382b"/>';
+  s += '<text x="200" y="64" text-anchor="middle" font-size="9" fill="#6f8f76" font-weight="600">AREA KAMPUS</text>';
+  s += '<rect x="212" y="312" width="86" height="96" rx="8" fill="#1f3a2a"/>';
+  s += '<text x="255" y="364" text-anchor="middle" font-size="9" fill="#6f8f76" font-weight="600">Taman</text>';
+  s += '<path d="M-10 250 C80 232 150 272 220 252 S340 236 400 252" fill="none" stroke="#16324a" stroke-width="22"/>';
+  [90, 200, 310].forEach(x => {
+    s += '<line x1="' + x + '" y1="0" x2="' + x + '" y2="844" stroke="' + (x === 200 ? '#4b4b50' : '#3a3a3d') + '" stroke-width="' + (x === 200 ? 18 : 14) + '"/>';
+  });
+  [180, 300, 420, 540, 660, 780].forEach(y => {
+    s += '<line x1="0" y1="' + y + '" x2="390" y2="' + y + '" stroke="' + (y === 300 ? '#4b4b50' : '#3a3a3d') + '" stroke-width="' + (y === 300 ? 18 : 14) + '"/>';
+  });
+  s += '<text x="30" y="304" font-size="8.5" fill="#9a9aa0">Jl. Merdeka</text>';
+  s += '<text x="140" y="424" font-size="8.5" fill="#9a9aa0">Jl. Raya Barat</text>';
+  s += '<text transform="translate(94 470) rotate(-90)" font-size="8.5" fill="#9a9aa0">Jl. Melati</text>';
+  s += '<text transform="translate(204 480) rotate(-90)" font-size="8.5" fill="#b0b0b6">Jl. Kampus Raya</text>';
+  s += '<text transform="translate(314 480) rotate(-90)" font-size="8.5" fill="#9a9aa0">Jl. Mawar</text>';
+
+  if (ruteId) {
+    const t = tempat.find(a => a.id === ruteId);
+    const pts = t.rute.map(p => p.join(',')).join(' ');
+    s += '<polyline points="' + pts + '" fill="none" stroke="#fff" stroke-opacity=".35" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>';
+    s += '<polyline points="' + pts + '" fill="none" stroke="#0a84ff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>';
+  }
+
+  tempat.forEach(t => {
+    const pilih = dipilih === t.id;
+    const k = pilih ? 1.3 : 1;
+    s += '<g class="pin" data-id="' + t.id + '" transform="translate(' + t.x + ' ' + t.y + ') scale(' + k + ')" style="cursor:pointer">' +
+         '<path d="M0 0 L-6 -12 L6 -12 Z" fill="' + t.warna + '"/>' +
+         '<circle cx="0" cy="-22" r="13" fill="' + t.warna + '" stroke="#fff" stroke-width="' + (pilih ? 3 : 2) + '"/>' +
+         '<text x="0" y="-17" text-anchor="middle" font-size="14">' + t.ikon + '</text>' +
+         '<text x="0" y="14" text-anchor="middle" font-size="9" font-weight="700" fill="#fff" stroke="#000" stroke-width="2.5" paint-order="stroke">' + t.nama.replace(' 💕','') + '</text>' +
+         '</g>';
+  });
+  svg.innerHTML = s;
+  svg.querySelectorAll('.pin').forEach(g => g.onclick = () => buka(g.dataset.id));
+}
+
+// ====== SHEET ======
+const daftar = document.getElementById('daftar');
+const detail = document.getElementById('detail');
+const rec = document.getElementById('rec');
+const q = document.getElementById('q');
+
+function renderDaftar() {
+  const cari = q.value.trim().toLowerCase();
+  rec.innerHTML = '';
+  tempat.filter(t => !cari || (t.nama + ' ' + t.sub + ' ' + t.alamat).toLowerCase().includes(cari)).forEach(t => {
+    const e = document.createElement('div');
+    e.className = 'it';
+    e.innerHTML = '<div class="lg"></div><div class="tt"><b></b><small></small></div>';
+    const lg = e.querySelector('.lg');
+    lg.textContent = t.ikon; lg.style.background = t.warna;
+    e.querySelector('b').textContent = t.nama;
+    e.querySelector('small').textContent = (t.jarak ? t.jarak + ' · ' : '') + t.alamat;
+    e.onclick = () => buka(t.id);
+    rec.appendChild(e);
+  });
+}
+
+function buka(id) {
+  const t = tempat.find(a => a.id === id);
+  dipilih = id; ruteId = null;
+  document.getElementById('dn').textContent = t.nama;
+  document.getElementById('ds').textContent = t.sub;
+  document.getElementById('da').textContent = t.alamat;
+  document.getElementById('di').innerHTML = t.rute ? '🚗 ' + t.waktu + ' <small>· ' + t.jarak + ' dari Kos Jeno</small>' : '🏠 <small>Tempat kamu sekarang</small>';
+  document.getElementById('tombol').style.display = t.rute ? 'flex' : 'none';
+  const a = document.getElementById('arah');
+  a.textContent = 'Directions'; a.className = 'biru';
+  daftar.style.display = 'none'; detail.style.display = 'block';
+  gambar();
+}
+
+function tutup() {
+  dipilih = null; ruteId = null;
+  detail.style.display = 'none'; daftar.style.display = 'block';
+  gambar();
+}
+
+document.getElementById('tutup').onclick = tutup;
+document.getElementById('arah').onclick = () => {
+  const a = document.getElementById('arah');
+  const t = tempat.find(x => x.id === dipilih);
+  if (ruteId) {
+    ruteId = null; a.textContent = 'Directions'; a.className = 'biru';
+    document.getElementById('di').innerHTML = '🚗 ' + t.waktu + ' <small>· ' + t.jarak + ' dari Kos Jeno</small>';
+  } else {
+    ruteId = dipilih; a.textContent = 'End'; a.className = 'merah';
+    document.getElementById('di').innerHTML = '<b>' + t.waktu + '</b> <small>(' + t.jarak + ') · rute tercepat</small>';
+  }
+  gambar();
+};
+document.getElementById('pHome').onclick = () => buka('jeno');
+document.getElementById('pWork').onclick = () => buka('kampus');
+q.oninput = renderDaftar;
+
+gambar();
+renderDaftar();
+</script>
+</body>
+</html>

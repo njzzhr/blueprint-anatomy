@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<title>Settings</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;height:100vh;display:flex;justify-content:center;align-items:center;background:#0b0b0f;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}
+.hp{position:relative;height:92vh;aspect-ratio:390/844;font-size:1.7vh;border:.8vh solid #222;border-radius:6vh;overflow:hidden;color:#fff;background:#000}
+.pulau{position:absolute;top:1.4vh;left:50%;transform:translateX(-50%);width:13vh;height:4vh;background:#000;border-radius:3vh;z-index:12}
+.status{position:absolute;top:1.4vh;left:0;right:0;height:4vh;display:flex;justify-content:space-between;align-items:center;padding:0 2.4em;font-weight:600;z-index:11}
+.status .r{display:flex;align-items:center;gap:.4em}
+.status svg{fill:#fff;height:.8em;width:auto}
+.bt{width:1.9em;height:.95em;border:1px solid rgba(255,255,255,.55);border-radius:.3em;position:relative}
+.bt::before{content:"";position:absolute;left:1px;top:1px;bottom:1px;width:75%;background:#fff;border-radius:.15em}
+
+.pg{position:absolute;inset:0;display:none;flex-direction:column;padding-top:5.8vh;background:#000}
+.pg.on{display:flex}
+.nav{display:flex;align-items:center;padding:.7em 1.1em;color:#0a84ff;font-size:1em;cursor:pointer;min-height:2.6em}
+.nav svg{width:1.4em;height:1.4em;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.sc{flex:1;min-height:0;overflow-y:auto;scrollbar-width:none;padding-bottom:3.4em}
+.sc::-webkit-scrollbar{display:none}
+.big{font-size:2em;font-weight:700;padding:.1em 1.1em .35em}
+.cari{display:flex;align-items:center;gap:.5em;background:#1c1c1e;border-radius:.8em;margin:0 1.1em 1em;padding:.55em .8em}
+.cari input{flex:1;background:none;border:0;outline:0;color:#fff;font-size:.95em;font-family:inherit}
+.cari input::placeholder{color:#8e8e93}
+.grup{background:#1c1c1e;border-radius:.9em;margin:0 1.1em 1.2em;overflow:hidden}
+.jdl{color:#8e8e93;font-size:.78em;text-transform:uppercase;padding:0 2em .45em;margin-top:-.4em}
+.row{display:flex;align-items:center;gap:.8em;padding:.65em .9em;position:relative;cursor:pointer;min-height:3em}
+.row + .row::before{content:"";position:absolute;top:0;left:3.5em;right:0;height:1px;background:#2c2c2e}
+.row.polos + .row::before,.row.polos::before{left:.9em}
+.ico{width:1.9em;height:1.9em;border-radius:.45em;display:grid;place-items:center;font-size:.95em;flex:none}
+.row .l{flex:1;font-size:.98em}
+.row .v{color:#8e8e93;font-size:.9em}
+.row .c{color:#48484a;font-size:1.1em}
+.sw{width:3em;height:1.8em;border-radius:1em;background:#39393d;position:relative;flex:none;cursor:pointer;transition:background .2s}
+.sw::after{content:"";position:absolute;top:.15em;left:.15em;width:1.5em;height:1.5em;border-radius:50%;background:#fff;transition:left .2s}
+.sw.on{background:#30d158}
+.sw.on::after{left:1.35em}
+.akun{display:flex;align-items:center;gap:.9em;padding:.9em}
+.akun .av{width:3.6em;height:3.6em;border-radius:50%;background:#48484a center/cover;flex:none;display:grid;place-items:center;font-size:1.2em;font-weight:600}
+.akun b{display:block;font-size:1.15em;font-weight:500}
+.akun small{display:block;color:#8e8e93;font-size:.8em;margin-top:.15em;line-height:1.3}
+.avbesar{width:6em;height:6em;border-radius:50%;background:#48484a center/cover;margin:.4em auto .6em}
+.tengah{text-align:center;margin-bottom:1.2em}
+.tengah b{display:block;font-size:1.3em;font-weight:600}
+.tengah small{color:#8e8e93;font-size:.85em}
+.cek{color:#0a84ff;font-size:1.1em;width:1.2em;text-align:center}
+.pjg{height:.6em;background:#2c2c2e;border-radius:1em;overflow:hidden;margin-top:.45em}
+.pjg i{display:block;height:100%;border-radius:1em;background:#0a84ff}
+.bar2 .pjg{margin-top:.35em}
+.btrbesar{text-align:center;padding:.4em 0 1em}
+.btrbesar b{font-size:3.4em;font-weight:300}
+.btrbesar small{display:block;color:#8e8e93;font-size:.85em}
+.grafik{display:flex;align-items:flex-end;justify-content:space-between;height:7em;padding:0 1em 0}
+.grafik div{flex:1;text-align:center;font-size:.7em;color:#8e8e93}
+.grafik i{display:block;width:55%;margin:0 auto .3em;border-radius:.3em .3em 0 0;background:#bf5af2}
+.rat{padding:.9em;font-size:.85em;color:#8e8e93}
+.rat b{display:block;color:#fff;font-size:2em;font-weight:500;margin-top:.1em}
+.home{position:absolute;bottom:0;left:0;right:0;height:2.2em;display:flex;justify-content:center;align-items:flex-end;padding-bottom:.6em;cursor:pointer;z-index:13}
+.home i{width:10em;height:.35em;border-radius:1em;background:#fff;display:block}
+</style>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><link rel="stylesheet" href="mobile.css"></head>
+<body>
+<div class="hp">
+  <div class="pulau"></div>
+
+  <div class="status">
+    <span>21:06</span>
+    <div class="r">
+      <svg viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx=".7"/><rect x="5" y="5.5" width="3" height="6.5" rx=".7"/><rect x="10" y="3" width="3" height="9" rx=".7"/><rect x="15" y="0" width="3" height="12" rx=".7"/></svg>
+      <svg viewBox="0 0 16 12"><path d="M8 2.4c2.2 0 4.2.9 5.7 2.3l1-1.1C12.9 1.9 10.6.9 8 .9S3.1 1.9 1.3 3.6l1 1.1C3.8 3.3 5.8 2.4 8 2.4zm0 3.6c1.2 0 2.3.5 3.2 1.2l1-1.1C11 5 9.6 4.4 8 4.4S5 5 3.8 6.1l1 1.1C5.7 6.5 6.8 6 8 6zm0 3.4L6.3 7.6c.5-.5 1.1-.7 1.7-.7s1.2.2 1.7.7L8 9.4z"/></svg>
+      <div class="bt"></div>
+    </div>
+  </div>
+
+  <!-- UTAMA -->
+  <div class="pg on" id="utama">
+    <div class="nav"></div>
+    <div class="sc">
+      <div class="big">Settings</div>
+      <div class="cari">🔍<input id="q" type="text" placeholder="Search"></div>
+      <div id="isiUtama"></div>
+    </div>
+  </div>
+
+  <!-- APPLE ACCOUNT -->
+  <div class="pg" id="akun">
+    <div class="nav" data-ke="utama"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg>Settings</div>
+    <div class="sc" id="isiAkun"></div>
+  </div>
+
+  <!-- WI-FI -->
+  <div class="pg" id="wifi">
+    <div class="nav" data-ke="utama"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg>Settings</div>
+    <div class="sc" id="isiWifi"></div>
+  </div>
+
+  <!-- BATTERY -->
+  <div class="pg" id="baterai">
+    <div class="nav" data-ke="utama"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg>Settings</div>
+    <div class="sc" id="isiBaterai"></div>
+  </div>
+
+  <!-- SCREEN TIME -->
+  <div class="pg" id="layar">
+    <div class="nav" data-ke="utama"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg>Settings</div>
+    <div class="sc" id="isiLayar"></div>
+  </div>
+
+  <div class="home" onclick="location.href='home.html'"><i></i></div>
+</div>
+
+<script>
+// ====== GANTI DATA DI SINI ======
+const profil = { nama: 'Jeno Lee', email: 'jeno.lee@icloud.com', telepon: '+62 812-3456-7890', foto: 'profileig' };
+
+const wifi = {
+  aktif: true,
+  terhubung: 'Kos-Melati-5G',
+  daftar: ['Kos-Melati-5G', 'Indihome-8F2A', 'Kampus-Hotspot', 'KostMawar_Guest']
+};
+
+const persenBaterai = 78;
+// [nama app, persen pemakaian baterai]
+const pakaiBaterai = [['Messages', 32], ['Instagram', 28], ['Safari', 14], ['Notes', 9], ['Photos', 7], ['Maps', 5]];
+
+// Screen Time: rata-rata harian, jam per hari (Sen-Min), dan per app [nama, teks, menit]
+const rataLayar = '6 j 12 m';
+const hariLayar = [['S', 5.2], ['S', 6.8], ['R', 6.1], ['K', 7.4], ['J', 5.9], ['S', 6.2], ['M', 4.8]];
+const appLayar = [['Messages', '2 j 40 m', 160], ['Instagram', '1 j 55 m', 115], ['Safari', '48 m', 48], ['Notes', '36 m', 36], ['Photos', '22 m', 22], ['Phone', '18 m', 18]];
+
+// ====== KODE ======
+const st = { pesawat: false, bt: true, lowpower: false };
+const $ = id => document.getElementById(id);
+const sw = (on, id) => '<div class="sw' + (on ? ' on' : '') + '" data-sw="' + id + '"></div>';
+const c = '<span class="c">&#8250;</span>';
+const ikon = (e, w) => '<div class="ico" style="background:' + w + '">' + e + '</div>';
+
+function pasang(el, nama) {
+  const coba = [nama + '.jpg', nama + '.jpg.jpg'];
+  (function next(i) {
+    if (i >= coba.length) return;
+    const im = new Image();
+    im.onload = () => { el.style.backgroundImage = "url('" + coba[i] + "')"; };
+    im.onerror = () => next(i + 1);
+    im.src = coba[i];
+  })(0);
+}
+
+function pergi(id) {
+  document.querySelectorAll('.pg').forEach(p => p.classList.toggle('on', p.id === id));
+  if (id === 'wifi') renderWifi();
+}
+
+// ---------- UTAMA ----------
+function barisUtama() {
+  return [
+    [
+      { e: '✈️', w: '#ff9f0a', l: 'Airplane Mode', sw: 'pesawat' },
+      { e: '📶', w: '#0a84ff', l: 'Wi-Fi', v: () => (st.pesawat || !wifi.aktif) ? 'Off' : wifi.terhubung, ke: 'wifi' },
+      { e: 'ᛒ',  w: '#0a84ff', l: 'Bluetooth', v: () => st.bt ? 'On' : 'Off', aksi: 'bt' },
+      { e: '📡', w: '#30d158', l: 'Mobile Service', v: () => st.pesawat ? 'Off' : '' }
+    ],
+    [
+      { e: '🔋', w: '#30d158', l: 'Battery', v: () => persenBaterai + '%', ke: 'baterai' }
+    ],
+    [
+      { e: '🔔', w: '#ff453a', l: 'Notifications' },
+      { e: '🔊', w: '#ff375f', l: 'Sounds & Haptics' },
+      { e: '🌙', w: '#5e5ce6', l: 'Focus' },
+      { e: '⌛', w: '#5e5ce6', l: 'Screen Time', ke: 'layar' }
+    ],
+    [
+      { e: '⚙️', w: '#8e8e93', l: 'General' },
+      { e: '🎛️', w: '#636366', l: 'Control Center' },
+      { e: '☀️', w: '#0a84ff', l: 'Display & Brightness' },
+      { e: '📱', w: '#5e5ce6', l: 'Home Screen & App Library' },
+      { e: '🖼️', w: '#30b0c7', l: 'Wallpaper' }
+    ],
+    [
+      { e: '✋', w: '#0a84ff', l: 'Privacy & Security' },
+      { e: '🔑', w: '#8e8e93', l: 'Passwords' }
+    ]
+  ];
+}
+
+function renderUtama() {
+  const cari = $('q').value.trim().toLowerCase();
+  let h = '';
+  if (!cari || profil.nama.toLowerCase().includes(cari)) {
+    h += '<div class="grup"><div class="row akun" data-ke="akun"><div class="av" id="avUtama"></div><div style="flex:1"><b>' + profil.nama + '</b><small>Apple Account, iCloud, Media &amp; Purchases</small></div>' + c + '</div></div>';
+  }
+  barisUtama().forEach((g, gi) => {
+    const baris = g.filter(r => !cari || r.l.toLowerCase().includes(cari));
+    if (!baris.length) return;
+    h += '<div class="grup">';
+    baris.forEach(r => {
+      const dat = r.ke ? ' data-ke="' + r.ke + '"' : (r.aksi ? ' data-aksi="' + r.aksi + '"' : '');
+      h += '<div class="row"' + dat + '>' + ikon(r.e, r.w) + '<div class="l">' + r.l + '</div>' +
+           (r.sw ? sw(st[r.sw], r.sw) : ((r.v ? '<span class="v">' + r.v() + '</span>' : '') + (r.ke || r.aksi ? c : '' ))) + '</div>';
+    });
+    h += '</div>';
+  });
+  $('isiUtama').innerHTML = h;
+  const av = $('avUtama');
+  if (av) { pasang(av, profil.foto); if (!av.style.backgroundImage) av.textContent = profil.nama.charAt(0); }
+}
+
+// ---------- AKUN ----------
+function renderAkun() {
+  $('isiAkun').innerHTML =
+    '<div class="big" style="text-align:center;padding-bottom:0">Apple Account</div>' +
+    '<div class="avbesar" id="avBesar"></div>' +
+    '<div class="tengah"><b>' + profil.nama + '</b><small>' + profil.email + '</small></div>' +
+    '<div class="grup">' +
+      '<div class="row polos"><div class="l">Name</div><span class="v">' + profil.nama + '</span></div>' +
+      '<div class="row polos"><div class="l">Phone</div><span class="v">' + profil.telepon + '</span></div>' +
+      '<div class="row polos"><div class="l">Email</div><span class="v">' + profil.email + '</span></div>' +
+    '</div>' +
+    '<div class="grup">' +
+      '<div class="row polos"><div class="l">Sign-In &amp; Security</div>' + c + '</div>' +
+      '<div class="row polos"><div class="l">Payment &amp; Shipping</div>' + c + '</div>' +
+      '<div class="row polos"><div class="l">iCloud</div><span class="v">50 GB</span>' + c + '</div>' +
+    '</div>';
+  pasang($('avBesar'), profil.foto);
+}
+
+// ---------- WI-FI ----------
+function renderWifi() {
+  const aktif = wifi.aktif && !st.pesawat;
+  let h = '<div class="big">Wi-Fi</div><div class="grup"><div class="row polos"><div class="l">Wi-Fi</div>' + sw(wifi.aktif, 'wifi') + '</div></div>';
+  if (aktif) {
+    h += '<div class="jdl">Networks</div><div class="grup">';
+    wifi.daftar.forEach(n => {
+      h += '<div class="row polos" data-net="' + n + '"><div class="cek">' + (n === wifi.terhubung ? '✓' : '') + '</div><div class="l">' + n + '</div><span class="v">🔒</span></div>';
+    });
+    h += '</div>';
+  }
+  $('isiWifi').innerHTML = h;
+}
+
+// ---------- BATERAI ----------
+function renderBaterai() {
+  let h = '<div class="big">Battery</div>' +
+    '<div class="btrbesar"><b>' + persenBaterai + '%</b><small>Battery Level</small></div>' +
+    '<div class="grup"><div class="row polos"><div class="l">Low Power Mode</div>' + sw(st.lowpower, 'lowpower') + '</div></div>' +
+    '<div class="jdl">Battery Usage by App</div><div class="grup">';
+  pakaiBaterai.forEach(a => {
+    h += '<div class="row polos bar2" style="display:block"><div style="display:flex;justify-content:space-between"><span>' + a[0] + '</span><span class="v">' + a[1] + '%</span></div><div class="pjg"><i style="width:' + a[1] * 2.5 + '%;background:#30d158"></i></div></div>';
+  });
+  $('isiBaterai').innerHTML = h + '</div>';
+}
+
+// ---------- SCREEN TIME ----------
+function renderLayar() {
+  const maks = Math.max(...hariLayar.map(x => x[1]));
+  let h = '<div class="big">Screen Time</div><div class="grup">' +
+    '<div class="rat">Daily Average<b>' + rataLayar + '</b></div>' +
+    '<div class="grafik">';
+  hariLayar.forEach(x => { h += '<div><i style="height:' + (x[1] / maks * 5) + 'em"></i>' + x[0] + '</div>'; });
+  h += '</div><div style="height:.8em"></div></div><div class="jdl">Most Used</div><div class="grup">';
+  const mm = Math.max(...appLayar.map(x => x[2]));
+  appLayar.forEach(a => {
+    h += '<div class="row polos bar2" style="display:block"><div style="display:flex;justify-content:space-between"><span>' + a[0] + '</span><span class="v">' + a[1] + '</span></div><div class="pjg"><i style="width:' + a[2] / mm * 100 + '%;background:#bf5af2"></i></div></div>';
+  });
+  $('isiLayar').innerHTML = h + '</div>';
+}
+
+// ---------- EVENT ----------
+document.addEventListener('click', e => {
+  const s = e.target.closest('[data-sw]');
+  if (s) {
+    const k = s.dataset.sw;
+    if (k === 'wifi') { wifi.aktif = !wifi.aktif; renderWifi(); }
+    else if (k === 'lowpower') { st.lowpower = !st.lowpower; renderBaterai(); }
+    else { st[k] = !st[k]; renderUtama(); }
+    return;
+  }
+  const n = e.target.closest('[data-net]');
+  if (n) { wifi.terhubung = n.dataset.net; renderWifi(); return; }
+  const a = e.target.closest('[data-aksi]');
+  if (a) { if (a.dataset.aksi === 'bt') st.bt = !st.bt; renderUtama(); return; }
+  const k = e.target.closest('[data-ke]');
+  if (k) {
+    const ke = k.dataset.ke;
+    if (ke === 'utama') renderUtama();
+    if (ke === 'akun') renderAkun();
+    if (ke === 'baterai') renderBaterai();
+    if (ke === 'layar') renderLayar();
+    pergi(ke);
+  }
+});
+$('q').oninput = renderUtama;
+renderUtama();
+</script>
+</body>
+</html>

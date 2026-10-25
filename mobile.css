@@ -1,0 +1,18 @@
+/* Dipakai otomatis saat halaman dibuka di layar kecil (HP). Di laptop tidak berpengaruh. */
+@media (max-width: 700px) {
+  html, body { height: 100%; margin: 0; background: #000; overflow: hidden; }
+  body { display: block !important; height: 100dvh !important; }
+
+  /* Bingkai HP jadi layar penuh, tanpa border dan sudut membulat */
+  .hp {
+    width: 100vw !important;
+    height: 100dvh !important;
+    aspect-ratio: auto !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    font-size: 4.15vw !important;   /* menyamakan ukuran isi dengan tampilan di laptop */
+  }
+
+  /* iPhone asli sudah punya Dynamic Island / notch sendiri */
+  .pulau { display: none !important; }
+}
