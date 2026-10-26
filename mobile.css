@@ -10,7 +10,9 @@
     aspect-ratio: auto !important;
     border: 0 !important;
     border-radius: 0 !important;
-    font-size: 4.15vw !important;   /* menyamakan ukuran isi dengan tampilan di laptop */
+    /* Ukuran isi mengikuti lebar layar, tapi dibatasi tinggi layar supaya tidak ada yang tertutup dock */
+    font-size: 4.15vw !important;
+    font-size: min(4.15vw, 1.82dvh) !important;
   }
 
   /* iPhone asli sudah punya Dynamic Island / notch sendiri */
